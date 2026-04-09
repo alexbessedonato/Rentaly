@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
-import { useAuthActions } from "../hooks/useAuthActions"
+import { useAuthNavigation } from "../hooks/useAuthNavigation"
 
 export function LoginButton() {
-    const { goToLogin } = useAuthActions()
-    return <Button variant="outline" onClick={goToLogin}>Login</Button>
+    const { navigateToLogin } = useAuthNavigation()
+    return <Button variant="outline" onClick={navigateToLogin}>Login</Button>
 }

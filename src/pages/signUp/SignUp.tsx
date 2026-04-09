@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuthActions } from "@/features/auth/hooks/useAuthActions"
+import { useAuthNavigation } from "@/features/auth/hooks/useAuthNavigation"
+import { signUpAction } from "@/features/auth/actions/authActions"
 
 export function SignUp() {
-    const { executeSignUp, closeAuthModal } = useAuthActions()
+    const { navigateToHome } = useAuthNavigation()
 
     const form = useForm({
         defaultValues: {
@@ -16,12 +17,13 @@ export function SignUp() {
             confirmPassword: "",
         },
         onSubmit: async ({ value }) => {
-            await executeSignUp(value)
+            await signUpAction(value)
+            navigateToHome()
         },
     })
 
     return (
-        <Dialog open={true} onOpenChange={(open) => !open && closeAuthModal()}>
+        <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
             <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">Crear Cuenta</DialogTitle>

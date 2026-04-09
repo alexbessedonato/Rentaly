@@ -2,8 +2,9 @@ import { useForm } from "@tanstack/react-form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { useManagerActions } from "@/features/managers/hooks/useManagerActions"
-import { usePropertiesActions } from "@/features/properties/hooks/usePropertiesActions"
+import { useManagersQuery } from "@/features/managers/hooks/useManagersQuery"
+import { addPropertyAction } from "@/features/properties/actions/propertiesActions"
+import { usePropertiesNavigation } from "@/features/properties/hooks/usePropertiesNavigation"
 import {
     Dialog,
     DialogContent,
@@ -22,9 +23,8 @@ import {
 
 export const AddProperty = () => {
 
-    const { closeAddPropertyModal, executeAddProperty } = usePropertiesActions();
-    const { useManagers } = useManagerActions();
-    const { data: managers } = useManagers();
+    const { navigateToHome } = usePropertiesNavigation();
+    const { data: managers } = useManagersQuery();
 
     const form = useForm({
         defaultValues: {
@@ -37,14 +37,17 @@ export const AddProperty = () => {
             manager_id: "",
         },
         onSubmit: async ({ value }) => {
-            await executeAddProperty(value);
-            closeAddPropertyModal();
+            await addPropertyAction({
+                ...value,
+                manager_id: !value.manager_id || value.manager_id === "none" ? null : value.manager_id,
+            });
+            navigateToHome();
         }
     })
 
     return (
 
-        <Dialog open={true} onOpenChange={(open) => !open && closeAddPropertyModal()}>
+        <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
             <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">Add Property</DialogTitle>

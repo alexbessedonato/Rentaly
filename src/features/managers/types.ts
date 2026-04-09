@@ -5,9 +5,21 @@ export interface Manager {
   phone: string | null;
   email: string | null;
   company: string | null;
-  created_at?: string;
+  created_at: string;
 }
 
-export type ManagerInsert = Omit<Manager, 'id' | 'created_at'>;
+export type ManagerFormValues = {
+  name: string;
+  phone: string;
+  email: string;
+  company: string;
+};
 
-export type ManagerUpdate = Partial<ManagerInsert>;
+export type AddManagerInput = {
+  name: string;
+  phone: string | null;
+  email: string | null;
+  company: string | null;
+};
+
+export type ManagerUpdate = Partial<AddManagerInput>;

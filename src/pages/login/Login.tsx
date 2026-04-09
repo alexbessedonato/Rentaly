@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuthActions } from "@/features/auth/hooks/useAuthActions"
+import { useAuthNavigation } from "@/features/auth/hooks/useAuthNavigation"
+import { loginAction } from "@/features/auth/actions/authActions"
 
 export function Login() {
-    const { executeLogin, closeAuthModal } = useAuthActions()
+    const { navigateToHome } = useAuthNavigation();
 
     const form = useForm({
         defaultValues: {
@@ -21,12 +22,13 @@ export function Login() {
             password: "",
         },
         onSubmit: async ({ value }) => {
-            executeLogin(value)
+            await loginAction(value);
+            navigateToHome();
         },
     })
 
     return (
-        <Dialog open={true} onOpenChange={(open) => !open && closeAuthModal()}>
+        <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
             <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">Login</DialogTitle>

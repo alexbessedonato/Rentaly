@@ -1,25 +1,24 @@
 import { supabase } from "@/lib/supabaseClient";
-import type { Manager } from "../types";
+import { getCurrentUserId } from "@/utils/getCurrentUserId";
+import type { AddManagerInput, Manager } from "../types";
 
-export const getManagers = async (): Promise<any[]> => {
+export const getManagers = async (): Promise<Manager[]> => {
+  const { data, error } = await supabase
+    .from("manager")
+    .select("*")
+    .order("name", { ascending: true });
 
-    const {data, error} = await supabase
-        .from("manager")
-        .select("*")
-        .order("name", { ascending: true });
+  if (error) throw error;
 
-    if (error) throw error;
-
-    return data;
+  return data as Manager[];
 };
 
-export const addManager = async (manager: Omit<Manager, "id" | "owner_id" | "created_at">) => {
+export const addManager = async (manager: AddManagerInput): Promise<void> => {
+  const userId = await getCurrentUserId();
 
-    const { data: { user } } = await supabase.auth.getUser();
-
-    const { error } = await supabase
+  const { error } = await supabase
     .from("manager")
-    .insert({...manager, owner_id: user?.id})
+    .insert({ ...manager, owner_id: userId });
 
-    if (error) throw error;
+  if (error) throw error;
 };

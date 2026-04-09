@@ -1,71 +1,70 @@
 import { supabase } from "@/lib/supabaseClient";
-import type { AddPropertyFormValues } from "../types";
+import { getCurrentUserId } from "@/utils/getCurrentUserId";
+import type { PropertyForTable, PropertyFormValues } from "../types";
+import { PROPERTY_WITH_RELATIONS_SELECT } from "../constants/propertySelect";
 import { getFilePath } from "../utils/getFilePath";
 
-export const getProperties = async (): Promise<any[]> => {
-    const { data, error } = await supabase
-        .from("property")
-        .select(`
-            *,
-            manager:manager_id (
-                name
-            ),
-            tenants:tenant (
-                full_name,
-                email
-            )
-        `)
-        .order("name", { ascending: true });
+export const getProperties = async (): Promise<PropertyForTable[]> => {
+  const { data, error } = await supabase
+    .from("property")
+    .select(PROPERTY_WITH_RELATIONS_SELECT)
+    .order("name", { ascending: true });
 
-    if (error) {
-        throw new Error("Error fetching properties: " + error.message);
-    }
-    return data;
-}  
+  if (error) {
+    throw new Error("Error fetching properties: " + error.message);
+  }
+  return data as PropertyForTable[];
+};
 
-   export const addProperty = async (property: AddPropertyFormValues) => {
-    const { data: { user }, error: UserError } = await supabase.auth.getUser();
-    
-    if (UserError || !user) throw new Error("No user found");
+export const addProperty = async (
+  property: PropertyFormValues,
+): Promise<void> => {
+  const userId = await getCurrentUserId();
 
-    const { insurancePath, contractPath } = await getFilePath(property, user.id);
+  const { insurancePath, contractPath } = await getFilePath(property, userId);
 
-    let insurance_url = null;
-    let contract_url = null;
+  const insurance_url: string | null = await uploadOptionalFileAndGetUrl(
+    property.insurance_file,
+    insurancePath,
+    "Error subiendo seguro",
+  );
+  const contract_url: string | null = await uploadOptionalFileAndGetUrl(
+    property.contract_file,
+    contractPath,
+    "Error subiendo contrato",
+  );
 
-    if (property.insurance_file && insurancePath) {
-        const { error: StorageErrorIns } = await supabase.storage
-            .from("PropertyContracts")
-            .upload(insurancePath, property.insurance_file);
-            
-        if (StorageErrorIns) throw new Error("Error subiendo seguro: " + StorageErrorIns.message);
-        
-        insurance_url = supabase.storage.from("PropertyContracts").getPublicUrl(insurancePath).data.publicUrl;
-    }
+  const { insurance_file, contract_file, ...cleanPropertyData } = property;
 
-    if (property.contract_file && contractPath) {
-        const { error: StorageErrorCon } = await supabase.storage
-            .from("PropertyContracts")
-            .upload(contractPath, property.contract_file);
-            
-        if (StorageErrorCon) throw new Error("Error subiendo contrato: " + StorageErrorCon.message);
-        
-        contract_url = supabase.storage.from("PropertyContracts").getPublicUrl(contractPath).data.publicUrl;
-    }
+  const { error: DbError } = await supabase.from("property").insert({
+    ...cleanPropertyData,
+    insurance_url,
+    contract_url,
+    user_id: userId,
+  });
 
-    const { insurance_file, contract_file, ...cleanPropertyData } = property;
+  if (DbError) {
+    throw new Error("Error adding property: " + DbError.message);
+  }
+};
 
-    const { error: DbError } = await supabase
-        .from('property')
-        .insert({
-            ...cleanPropertyData, 
-            insurance_url,      
-            contract_url,       
-            user_id: user.id    
-        })
-       
-    if (DbError) {
-        throw new Error("Error adding property: " + DbError.message);
-    }
+const uploadOptionalFileAndGetUrl = async (
+  file: File | null,
+  path: string | null,
+  errorPrefix: string,
+): Promise<string | null> => {
+  if (!file || !path) {
+    return null;
+  }
 
-    };
+  const { error } = await supabase.storage
+    .from("PropertyContracts")
+    .upload(path, file);
+
+  if (error) {
+    throw new Error(`${errorPrefix}: ${error.message}`);
+  }
+
+  return supabase.storage.from("PropertyContracts").getPublicUrl(path).data
+    .publicUrl;
+};

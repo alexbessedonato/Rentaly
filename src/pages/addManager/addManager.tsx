@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useManagerActions } from "@/features/managers/hooks/useManagerActions"
+import { addManagerAction } from "@/features/managers/actions/managersActions"
+import { useManagersNavigation } from "@/features/managers/hooks/useManagersNavigation"
 import { Button } from "@/components/ui/button"
 
 export const AddManager = () => {
-    const { closeAddManagerModal, executeAddManager } = useManagerActions();
+    const { navigateToHome } = useManagersNavigation();
 
     const form = useForm({
         defaultValues: {
@@ -23,13 +24,13 @@ export const AddManager = () => {
             phone: "",
         },
         onSubmit: async ({ value }) => {
-            await executeAddManager(value);
-            closeAddManagerModal();
+            await addManagerAction(value);
+            navigateToHome();
         }
     });
 
     return (
-        <Dialog open={true} onOpenChange={(open) => !open && closeAddManagerModal()}>
+        <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
             <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">Add Manager</DialogTitle>

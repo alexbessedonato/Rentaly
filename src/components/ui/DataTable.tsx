@@ -7,16 +7,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-export interface TableData<TCell = React.ReactNode> {
-    headers: string[];
-    rows: TCell[][];
-}
-
-interface DataTableProps<TCell = React.ReactNode> {
-    tableData: TableData<TCell>;
-}
-
-export const DataTable = <TCell extends React.ReactNode>({ tableData }: DataTableProps<TCell>) => {
+export const DataTable = ({ tableData }) => {
     const headers = tableData.headers ?? []
     const rows = tableData.rows ?? []
 

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { useAuthActions } from "../hooks/useAuthActions"
+import { logoutAction } from "../actions/authActions"
 
 export function LogoutButton() {
-    const { executeLogout } = useAuthActions()
-    return <Button variant="outline" onClick={executeLogout}>Logout</Button>
+    return <Button variant="outline" onClick={logoutAction}>Logout</Button>
 }
