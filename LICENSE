@@ -1,0 +1,56 @@
+RealEstateTracker Non-Commercial + No-AI License v1.0
+
+Copyright (c) 2026 Alex Besse Donato
+
+1. Definitions
+
+"Software" means this repository and all source code, documentation, assets, and related materials distributed with it.
+
+"You" means any individual or entity exercising permissions under this License.
+
+"Commercial Use" means use primarily intended for or directed toward commercial advantage or monetary compensation, including paid services, internal business operations, revenue-generating products, or client work.
+
+"AI/ML Use" means use of the Software or derivatives for training, fine-tuning, evaluating, improving, or developing machine learning or artificial intelligence models, systems, embeddings, datasets, or similar artifacts.
+
+2. License Grant (Limited)
+
+Subject to the terms of this License, the Licensor grants You a worldwide, royalty-free, non-exclusive, revocable license to:
+
+- use, copy, and modify the Software for personal, educational, research, and other non-commercial purposes;
+- share and redistribute the Software and your modifications for non-commercial purposes only.
+
+3. Conditions
+
+You must comply with all of the following:
+
+- Attribution Required: You must retain this License and provide clear attribution to the original author, Alex Bessedonato, in source and substantial user-facing documentation for redistributions or derivative works.
+- Same Terms for Redistributed Derivatives: If You distribute modifications, they must be distributed under this same License.
+- Mark Changes: You must state significant modifications made by You.
+
+4. Restrictions
+
+The following are prohibited without prior written permission from the Licensor:
+
+- Commercial Use of the Software or derivatives.
+- AI/ML Use of the Software or derivatives, including but not limited to model training, fine-tuning, evaluation, synthetic data generation, embedding generation for model development, or dataset creation for AI systems.
+- Removing attribution notices, copyright notices, or this License text.
+
+5. Contributions
+
+By submitting any contribution (including pull requests, patches, or issues containing code), You agree that your contribution is licensed under this License and can be used and redistributed by the Licensor under these terms.
+
+6. Termination
+
+Any breach of this License automatically terminates your rights under it. Upon termination, You must stop using and distributing the Software and derivatives.
+
+7. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+8. Limitation of Liability
+
+IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+9. Governing Interpretation
+
+If any provision is held unenforceable, the remaining provisions remain in effect.
