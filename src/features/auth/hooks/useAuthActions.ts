@@ -6,12 +6,10 @@ import { toast } from "sonner";
 export const useAuthActions = () => {
     const navigate = useNavigate()
 
-    // --- NAVEGACIÓN (Ir a pantallas) ---
     const goToLogin = () => navigate({ to: '/login' })
     const goToSignUp = () => navigate({ to: '/signup' })
     const closeAuthModal = () => navigate({ to: '/' })
 
-    // --- ACCIONES (Hablar con Supabase) ---
     const executeLogin = async (values: LoginFormValues) => {
         try {
             await loginWithEmail(values)

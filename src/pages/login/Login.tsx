@@ -15,7 +15,6 @@ import { useAuthActions } from "@/features/auth/hooks/useAuthActions"
 export function Login() {
     const { executeLogin, closeAuthModal } = useAuthActions()
 
-    // 1. Definimos el formulario con validación manual
     const form = useForm({
         defaultValues: {
             email: "",
@@ -44,7 +43,6 @@ export function Login() {
                     }}
                     className="space-y-4 pt-4"
                 >
-                    {/* CAMPO EMAIL */}
                     <form.Field
                         name="email"
                         validators={{
@@ -61,7 +59,6 @@ export function Login() {
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     placeholder="ejemplo@correo.com"
                                 />
-                                {/* Mostramos el error si existe */}
                                 {field.state.meta.errors && (
                                     <p className="text-xs text-red-500">{field.state.meta.errors}</p>
                                 )}
@@ -69,7 +66,6 @@ export function Login() {
                         )}
                     />
 
-                    {/* CAMPO PASSWORD */}
                     <form.Field
                         name="password"
                         validators={{

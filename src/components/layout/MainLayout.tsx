@@ -11,7 +11,7 @@ export const MainLayout = () => {
                 <NavigationBar />
             </header>
 
-            <main>
+            <main className='bg-gray-100 min-h-screen'>
                 <Outlet />
             </main>
         </div>

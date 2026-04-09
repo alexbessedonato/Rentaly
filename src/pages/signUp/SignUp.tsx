@@ -38,7 +38,6 @@ export function SignUp() {
                     }}
                     className="space-y-4 pt-2"
                 >
-                    {/* NOMBRE COMPLETO */}
                     <form.Field
                         name="fullName"
                         validators={{
@@ -55,7 +54,6 @@ export function SignUp() {
                         )}
                     />
 
-                    {/* EMAIL */}
                     <form.Field
                         name="email"
                         validators={{
@@ -72,7 +70,6 @@ export function SignUp() {
                         )}
                     />
 
-                    {/* PASSWORD */}
                     <form.Field
                         name="password"
                         validators={{
@@ -89,7 +86,6 @@ export function SignUp() {
                         )}
                     />
 
-                    {/* CONFIRMAR PASSWORD (Validación Cruzada) */}
                     <form.Field
                         name="confirmPassword"
                         validators={{

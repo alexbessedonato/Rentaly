@@ -6,7 +6,6 @@ import { setAuth } from './features/auth/store/authStore.ts'
 import { supabase } from './lib/supabaseClient.ts'
 
 supabase.auth.onAuthStateChange((_event, session) => {
-  console.log("Auth state changed:", _event, session)
   setAuth(session?.user ?? null)
 })
 
