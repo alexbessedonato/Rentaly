@@ -25,7 +25,7 @@ export const ManagersList = () => {
                     <div className="flex justify-between items-center">
                         <CardTitle>Managers</CardTitle>
                         {managers.length > 0 && (
-                            <Button variant="outline" onClick={navigateToAddManager}>Add Manager</Button>
+                            <Button variant="outline" className="bg-blue-950 text-white" onClick={navigateToAddManager}>Add Manager</Button>
                         )}
                     </div>
                 </CardHeader>
@@ -43,13 +43,13 @@ export const ManagersList = () => {
                             <Table className="w-full">
                                 <TableHeader className="bg-gray-100">
                                     <TableRow>
-                                        <TableHead className="w-1/4 text-center">NAME</TableHead>
-                                        <TableHead className="w-1/4 text-center">COMPANY</TableHead>
-                                        <TableHead className="w-1/4 text-center">EMAIL</TableHead>
-                                        <TableHead className="w-1/4 text-center">PHONE</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">NAME</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">COMPANY</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">EMAIL</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">PHONE</TableHead>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody>
+                                <TableBody className="text-blue-950">
                                     {managers.map((manager) => (
                                         <TableRow key={manager.id}>
                                             <TableCell className="text-center">{manager.name ?? "-"}</TableCell>

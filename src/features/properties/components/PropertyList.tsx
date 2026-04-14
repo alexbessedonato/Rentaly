@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Eye } from "lucide-react"
+import { ReceiptText } from "lucide-react"
 import { usePropertiesListViewModel } from "../hooks/usePropertiesListViewModel"
 import {
     Table,
@@ -30,7 +32,7 @@ export const PropertyList = () => {
                             </CardDescription>
                         </div>
                         {properties.length > 0 && (
-                            <Button variant="outline" onClick={navigateToAddProperty}>Add Property</Button>
+                            <Button variant="outline" className="bg-blue-950 text-white" onClick={navigateToAddProperty}>Add Property</Button>
                         )}
                     </div>
                 </CardHeader>
@@ -48,16 +50,16 @@ export const PropertyList = () => {
                             <Table>
                                 <TableHeader className="bg-gray-100">
                                     <TableRow>
-                                        <TableHead className="text-center">PROPERTY</TableHead>
-                                        <TableHead className="text-center">TENANT</TableHead>
-                                        <TableHead className="text-center">MANAGER</TableHead>
-                                        <TableHead className="text-center">RENT</TableHead>
-                                        <TableHead className="text-center">MORTGAGE</TableHead>
-                                        <TableHead className="text-center">INSURANCE</TableHead>
-                                        <TableHead className="text-center">CONTRACT</TableHead>
+                                        <TableHead className="text-center font-semibold">PROPERTY</TableHead>
+                                        <TableHead className="text-center font-semibold">TENANT</TableHead>
+                                        <TableHead className="text-center font-semibold">MANAGER</TableHead>
+                                        <TableHead className="text-center font-semibold">RENT</TableHead>
+                                        <TableHead className="text-center font-semibold">MORTGAGE</TableHead>
+                                        <TableHead className="text-center font-semibold">INSURANCE</TableHead>
+                                        <TableHead className="text-center font-semibold">CONTRACT</TableHead>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody>
+                                <TableBody className="text-blue-950">
                                     {properties.map((property) => (
                                         <TableRow key={property.name}>
                                             <TableCell className="text-center">
@@ -70,28 +72,32 @@ export const PropertyList = () => {
                                             </TableCell>
                                             <TableCell className="text-center">{property.tenants?.[0]?.full_name ?? "Not assigned"}</TableCell>
                                             <TableCell className="text-center">{property.manager?.name ?? "Not assigned"}</TableCell>
-                                            <TableCell className="text-center">{property.rent} €</TableCell>
-                                            <TableCell className="text-center">{property.mortgage} €</TableCell>
+                                            <TableCell className="text-center">{property.rent}€</TableCell>
+                                            <TableCell className="text-center">{property.mortgage}€</TableCell>
                                             <TableCell className="text-center">
                                                 {property.insurance_url ? (
                                                     <Button
                                                         variant="outline"
+                                                        className="font-bold"
                                                         size="sm"
                                                         onClick={() => property.insurance_url && void handleOpenFile(property.insurance_url)}
                                                     >
+                                                        <Eye className="mr-2 h-4 w-4" />
                                                         View Insurance
                                                     </Button>
                                                 ) : (
                                                     "No insurance assigned"
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-center">
+                                            <TableCell className="text-center text-blue-950">
                                                 {property.contract_url ? (
                                                     <Button
                                                         variant="outline"
+                                                        className="font-bold"
                                                         size="sm"
                                                         onClick={() => property.contract_url && void handleOpenFile(property.contract_url)}
                                                     >
+                                                        <ReceiptText className=" mr-2 h-4 w-4" />
                                                         View Contract
                                                     </Button>
                                                 ) : (

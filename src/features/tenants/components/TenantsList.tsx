@@ -26,7 +26,7 @@ export const TenantsList = () => {
                     <div className="flex justify-between items-center">
                         <CardTitle>Tenants</CardTitle>
                         {tenants.length > 0 && (
-                            <Button variant="outline" onClick={navigateToAddTenant}>Add Tenant</Button>
+                            <Button variant="outline" className="bg-blue-950 text-white" onClick={navigateToAddTenant}>Add Tenant</Button>
                         )}
                     </div>
                 </CardHeader>
@@ -44,13 +44,13 @@ export const TenantsList = () => {
                             <Table className="w-full">
                                 <TableHeader className="bg-gray-100">
                                     <TableRow>
-                                        <TableHead className="w-1/4 text-center">NAME</TableHead>
-                                        <TableHead className="w-1/4 text-center">PROPERTY</TableHead>
-                                        <TableHead className="w-1/4 text-center">EMAIL</TableHead>
-                                        <TableHead className="w-1/4 text-center">PHONE</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">NAME</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">PROPERTY</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">EMAIL</TableHead>
+                                        <TableHead className="w-1/4 text-center font-semibold">PHONE</TableHead>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody>
+                                <TableBody className="text-blue-950">
                                     {tenants.map((tenant) => (
                                         <TableRow key={`${tenant.full_name}-${tenant.email ?? tenant.phone ?? "-"}`}>
                                             <TableCell className="text-center">{tenant.full_name ?? "-"}</TableCell>
