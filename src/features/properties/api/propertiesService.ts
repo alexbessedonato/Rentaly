@@ -4,6 +4,8 @@ import type { PropertyForTable, PropertyFormValues } from "../types";
 import { PROPERTY_WITH_RELATIONS_SELECT } from "../constants/propertySelect";
 import { getFilePath } from "../utils/getFilePath";
 
+const PROPERTY_FILES_BUCKET = "PropertyContracts";
+
 export const getProperties = async (): Promise<PropertyForTable[]> => {
   const { data, error } = await supabase
     .from("property")
@@ -23,12 +25,12 @@ export const addProperty = async (
 
   const { insurancePath, contractPath } = await getFilePath(property, userId);
 
-  const insurance_url: string | null = await uploadOptionalFileAndGetUrl(
+  await uploadOptionalFileAndGetUrl(
     property.insurance_file,
     insurancePath,
     "Error subiendo seguro",
   );
-  const contract_url: string | null = await uploadOptionalFileAndGetUrl(
+  await uploadOptionalFileAndGetUrl(
     property.contract_file,
     contractPath,
     "Error subiendo contrato",
@@ -38,8 +40,8 @@ export const addProperty = async (
 
   const { error: DbError } = await supabase.from("property").insert({
     ...cleanPropertyData,
-    insurance_url,
-    contract_url,
+    insurance_url: insurancePath,
+    contract_url: contractPath,
     user_id: userId,
   });
 
@@ -52,19 +54,30 @@ const uploadOptionalFileAndGetUrl = async (
   file: File | null,
   path: string | null,
   errorPrefix: string,
-): Promise<string | null> => {
+): Promise<void> => {
   if (!file || !path) {
-    return null;
+    return;
   }
 
   const { error } = await supabase.storage
-    .from("PropertyContracts")
+    .from(PROPERTY_FILES_BUCKET)
     .upload(path, file);
 
   if (error) {
-    throw new Error(`${errorPrefix}: ${error.message}`);
+    throw new Error(
+      `${errorPrefix}: ${error.message}. Bucket used: ${PROPERTY_FILES_BUCKET}`,
+    );
+  }
+};
+
+export const getSignedUrl = async (path: string): Promise<string> => {
+  const { data, error } = await supabase.storage
+    .from(PROPERTY_FILES_BUCKET)
+    .createSignedUrl(path, 60); // URL válido por 60 segundos
+
+  if (error) {
+    throw new Error("Error generating signed URL: " + error.message);
   }
 
-  return supabase.storage.from("PropertyContracts").getPublicUrl(path).data
-    .publicUrl;
+  return data.signedUrl;
 };

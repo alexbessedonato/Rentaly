@@ -8,33 +8,34 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useManagersListViewModel } from "../hooks/useManagersListViewModel";
-import { useManagersNavigation } from "../hooks/useManagersNavigation";
+import { useTenantsNavigation } from "../hooks/useTenantsNavigation";
+import { useTenantsListViewModel } from "../hooks/useTenantsListModelView";
 
-export const ManagersList = () => {
+export const TenantsList = () => {
 
-    const { managers, isLoading } = useManagersListViewModel()
-    const { navigateToAddManager } = useManagersNavigation();
+    const { tenants, isLoading } = useTenantsListViewModel()
+    const { navigateToAddTenant } = useTenantsNavigation();
 
     if (isLoading) return <div>Loading...</div>
 
     return (
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <Card className="w-full">
                 <CardHeader>
                     <div className="flex justify-between items-center">
-                        <CardTitle>Managers</CardTitle>
-                        {managers.length > 0 && (
-                            <Button variant="outline" onClick={navigateToAddManager}>Add Manager</Button>
+                        <CardTitle>Tenants</CardTitle>
+                        {tenants.length > 0 && (
+                            <Button variant="outline" onClick={navigateToAddTenant}>Add Tenant</Button>
                         )}
                     </div>
                 </CardHeader>
-                {managers.length === 0 ? (
+                {tenants.length === 0 ? (
                     <CardContent>
                         <div className="flex flex-col items-center justify-center py-6">
-                            <h2 className="text-lg font-semibold text-gray-700">No managers found</h2>
-                            <p className="mt-1 text-sm text-gray-500">Start by adding a new manager.</p>
-                            <Button variant="outline" className="mt-3" onClick={navigateToAddManager}>Add Manager</Button>
+                            <h2 className="text-lg font-semibold text-gray-700">No tenants found</h2>
+                            <p className="mt-1 text-sm text-gray-500">Start by adding a new tenant.</p>
+                            <Button variant="outline" className="mt-3" onClick={navigateToAddTenant}>Add Tenant</Button>
                         </div>
                     </CardContent>
                 ) : (
@@ -44,18 +45,18 @@ export const ManagersList = () => {
                                 <TableHeader className="bg-gray-100">
                                     <TableRow>
                                         <TableHead className="w-1/4 text-center">NAME</TableHead>
-                                        <TableHead className="w-1/4 text-center">COMPANY</TableHead>
+                                        <TableHead className="w-1/4 text-center">PROPERTY</TableHead>
                                         <TableHead className="w-1/4 text-center">EMAIL</TableHead>
                                         <TableHead className="w-1/4 text-center">PHONE</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {managers.map((manager) => (
-                                        <TableRow key={manager.id}>
-                                            <TableCell className="text-center">{manager.name ?? "-"}</TableCell>
-                                            <TableCell className="text-center">{manager.company ?? "-"}</TableCell>
-                                            <TableCell className="text-center">{manager.email ?? "-"}</TableCell>
-                                            <TableCell className="text-center">{manager.phone ?? "-"}</TableCell>
+                                    {tenants.map((tenant) => (
+                                        <TableRow key={`${tenant.full_name}-${tenant.email ?? tenant.phone ?? "-"}`}>
+                                            <TableCell className="text-center">{tenant.full_name ?? "-"}</TableCell>
+                                            <TableCell className="text-center">{tenant.property?.name ?? "-"}</TableCell>
+                                            <TableCell className="text-center">{tenant.email ?? "-"}</TableCell>
+                                            <TableCell className="text-center">{tenant.phone ?? "-"}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -65,5 +66,6 @@ export const ManagersList = () => {
                 )}
             </Card>
         </div>
-    )
+
+    );
 };

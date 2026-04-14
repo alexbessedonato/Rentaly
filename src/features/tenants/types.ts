@@ -1,6 +1,6 @@
 export interface Tenant {
   id: string;
-  property_id: string;
+  property_id: string | null;
   full_name: string;
   email: string | null;
   phone: string | null;
@@ -8,10 +8,21 @@ export interface Tenant {
   created_at?: string;
 }
 
-export type TenantInsert = Omit<Tenant, 'id' | 'created_at'>;
+export interface AddTenantInput {
+  property_id: string | null;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  end_of_contract?: string | null;
+}
 
-export type TenantUpdate = Partial<TenantInsert>;
-
-export interface TenantWithProperty extends Tenant {
-  property_name?: string; 
+export interface TenantForTable {
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  end_of_contract: string | null;
+  property: {
+    name: string;
+    address: string | null;
+  };
 }

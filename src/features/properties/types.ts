@@ -27,6 +27,7 @@ export interface FileUploadInput {
 }
 
 export interface PropertyForTable {
+  id: string;
   name: string;
   address: string | null;
   rent: number;

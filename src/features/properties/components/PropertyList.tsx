@@ -12,8 +12,9 @@ import {
 import { usePropertiesNavigation } from "../hooks/usePropertiesNavigation"
 
 export const PropertyList = () => {
-    const { properties, isLoading } = usePropertiesListViewModel()
+    const { properties, isLoading, handleOpenFile } = usePropertiesListViewModel()
     const { navigateToAddProperty } = usePropertiesNavigation();
+
 
     if (isLoading) return <div>Loading...</div>
 
@@ -28,66 +29,82 @@ export const PropertyList = () => {
                                 updated on: {new Date().toLocaleTimeString()}
                             </CardDescription>
                         </div>
-                        <Button variant="outline" onClick={navigateToAddProperty}>Add Property</Button>
+                        {properties.length > 0 && (
+                            <Button variant="outline" onClick={navigateToAddProperty}>Add Property</Button>
+                        )}
                     </div>
                 </CardHeader>
-                <CardContent>
-                    <div className="rounded-md border border-gray-300 overflow-x-auto">
-                        <Table>
-                            <TableHeader className="bg-gray-100">
-                                <TableRow>
-                                    <TableHead className="text-center">PROPERTY</TableHead>
-                                    <TableHead className="text-center">TENANT</TableHead>
-                                    <TableHead className="text-center">MANAGER</TableHead>
-                                    <TableHead className="text-center">RENT</TableHead>
-                                    <TableHead className="text-center">MORTGAGE</TableHead>
-                                    <TableHead className="text-center">INSURANCE</TableHead>
-                                    <TableHead className="text-center">CONTRACT</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {properties.map((property) => (
-                                    <TableRow key={property.name}>
-                                        <TableCell className="text-center">
-                                            <div className="flex flex-col items-center leading-tight">
-                                                <span>{property.name}</span>
-                                                {property.address ? (
-                                                    <span className="mt-1 text-xs italic text-[#1f3a8a]">{property.address}</span>
-                                                ) : null}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-center">{property.tenants?.[0]?.full_name ?? "Not assigned"}</TableCell>
-                                        <TableCell className="text-center">{property.manager?.name ?? "Not assigned"}</TableCell>
-                                        <TableCell className="text-center">{property.rent} €</TableCell>
-                                        <TableCell className="text-center">{property.mortgage} €</TableCell>
-                                        <TableCell className="text-center">
-                                            {property.insurance_url ? (
-                                                <Button asChild variant="outline" size="sm">
-                                                    <a href={property.insurance_url} target="_blank" rel="noreferrer">
-                                                        View Insurance
-                                                    </a>
-                                                </Button>
-                                            ) : (
-                                                "No insurance assigned"
-                                            )}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {property.contract_url ? (
-                                                <Button asChild variant="outline" size="sm">
-                                                    <a href={property.contract_url} target="_blank" rel="noreferrer">
-                                                        View Contract
-                                                    </a>
-                                                </Button>
-                                            ) : (
-                                                "No contract assigned"
-                                            )}
-                                        </TableCell>
+                {properties.length === 0 ? (
+                    <CardContent>
+                        <div className="flex flex-col items-center justify-center py-6">
+                            <h2 className="text-lg font-semibold text-gray-700">No properties found</h2>
+                            <p className="mt-1 text-sm text-gray-500">Start by adding a new property.</p>
+                            <Button variant="outline" className="mt-3" onClick={navigateToAddProperty}>Add Property</Button>
+                        </div>
+                    </CardContent>
+                ) : (
+                    <CardContent>
+                        <div className="rounded-md border border-gray-300 overflow-x-auto">
+                            <Table>
+                                <TableHeader className="bg-gray-100">
+                                    <TableRow>
+                                        <TableHead className="text-center">PROPERTY</TableHead>
+                                        <TableHead className="text-center">TENANT</TableHead>
+                                        <TableHead className="text-center">MANAGER</TableHead>
+                                        <TableHead className="text-center">RENT</TableHead>
+                                        <TableHead className="text-center">MORTGAGE</TableHead>
+                                        <TableHead className="text-center">INSURANCE</TableHead>
+                                        <TableHead className="text-center">CONTRACT</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </CardContent>
+                                </TableHeader>
+                                <TableBody>
+                                    {properties.map((property) => (
+                                        <TableRow key={property.name}>
+                                            <TableCell className="text-center">
+                                                <div className="flex flex-col items-center leading-tight">
+                                                    <span>{property.name}</span>
+                                                    {property.address ? (
+                                                        <span className="mt-1 text-xs italic text-[#1f3a8a]">{property.address}</span>
+                                                    ) : null}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-center">{property.tenants?.[0]?.full_name ?? "Not assigned"}</TableCell>
+                                            <TableCell className="text-center">{property.manager?.name ?? "Not assigned"}</TableCell>
+                                            <TableCell className="text-center">{property.rent} €</TableCell>
+                                            <TableCell className="text-center">{property.mortgage} €</TableCell>
+                                            <TableCell className="text-center">
+                                                {property.insurance_url ? (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => property.insurance_url && void handleOpenFile(property.insurance_url)}
+                                                    >
+                                                        View Insurance
+                                                    </Button>
+                                                ) : (
+                                                    "No insurance assigned"
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="text-center">
+                                                {property.contract_url ? (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => property.contract_url && void handleOpenFile(property.contract_url)}
+                                                    >
+                                                        View Contract
+                                                    </Button>
+                                                ) : (
+                                                    "No contract assigned"
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+                )}
             </Card>
         </div>
     )
