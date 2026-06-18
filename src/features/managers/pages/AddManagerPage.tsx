@@ -1,9 +1,5 @@
-import { usePropertiesQuery } from "@/features/properties/hooks/queries";
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,35 +8,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useAddTenantMutation } from "../hooks/queries";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useAddManagerMutation } from "../hooks/queries";
 
-export const AddTenantPage = () => {
-  const addTenant = useAddTenantMutation();
+export const AddManagerPage = () => {
   const navigate = useNavigate();
   const navigateToHome = () => navigate({ to: "/" });
-  const { data: properties } = usePropertiesQuery();
+  const addManager = useAddManagerMutation();
 
   const form = useForm({
     defaultValues: {
-      full_name: "",
+      name: "",
+      company: "",
       email: "",
       phone: "",
-      property_id: "none",
     },
     onSubmit: async ({ value }) => {
-      await addTenant.mutateAsync({
-        full_name: value.full_name,
-        email: value.email || null,
-        phone: value.phone || null,
-        property_id: value.property_id === "none" ? null : value.property_id,
-      });
+      await addManager.mutateAsync(value);
       navigateToHome();
     },
   });
@@ -50,10 +36,10 @@ export const AddTenantPage = () => {
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            Add Tenant
+            Add Manager
           </DialogTitle>
           <DialogDescription className="text-center">
-            Introduce los datos del nuevo inquilino.
+            Introduce los datos del nuevo manager.
           </DialogDescription>
         </DialogHeader>
 
@@ -65,7 +51,7 @@ export const AddTenantPage = () => {
           }}
           className="flex flex-col gap-4"
         >
-          <form.Field name="full_name">
+          <form.Field name="name">
             {(field) => (
               <div className="space-y-1">
                 <Label htmlFor={field.name}>Nombre</Label>
@@ -74,7 +60,22 @@ export const AddTenantPage = () => {
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="nombre del inquilino"
+                  placeholder="nombre del manager"
+                />
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="company">
+            {(field) => (
+              <div className="space-y-1">
+                <Label htmlFor={field.name}>Empresa</Label>
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="nombre de la empresa"
                 />
               </div>
             )}
@@ -86,7 +87,8 @@ export const AddTenantPage = () => {
               onChange: ({ value }) =>
                 !value.includes("@") ? "Email inválido" : undefined,
             }}
-            children={(field) => (
+          >
+            {(field) => (
               <div className="space-y-1">
                 <Label htmlFor={field.name}>Email</Label>
                 <Input
@@ -94,14 +96,14 @@ export const AddTenantPage = () => {
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="ejemplo@correo.com"
+                  placeholder="correo electrónico"
                 />
                 {field.state.meta.errors && (
                   <p className="text-xs text-red-500">{field.state.meta.errors}</p>
                 )}
               </div>
             )}
-          />
+          </form.Field>
 
           <form.Field
             name="phone"
@@ -133,41 +135,15 @@ export const AddTenantPage = () => {
             )}
           </form.Field>
 
-          <form.Field name="property_id">
-            {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Propiedad (Opcional)</Label>
-                <Select
-                  value={field.state.value}
-                  onValueChange={field.handleChange}
-                >
-                  <SelectTrigger id={field.name}>
-                    <SelectValue placeholder="Selecciona una propiedad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Sin propiedad</SelectItem>
-
-                    {properties?.map((property) => (
-                      <SelectItem key={property.id} value={property.id}>
-                        {property.name}{" "}
-                        {property.address ? `(${property.address})` : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </form.Field>
-
           <DialogFooter className="pt-4">
             <Button
               type="submit"
               className="w-full"
-              disabled={form.state.isSubmitting || addTenant.isPending}
+              disabled={form.state.isSubmitting || addManager.isPending}
             >
-              {form.state.isSubmitting || addTenant.isPending
+              {form.state.isSubmitting || addManager.isPending
                 ? "Añadiendo..."
-                : "Añadir Inquilino"}
+                : "Añadir Manager"}
             </Button>
           </DialogFooter>
         </form>

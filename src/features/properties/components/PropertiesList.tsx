@@ -2,7 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Eye } from "lucide-react"
 import { ReceiptText } from "lucide-react"
-import { usePropertiesListViewModel } from "../hooks/usePropertiesListViewModel"
+import { useNavigate } from "@tanstack/react-router"
+import { usePropertiesList } from "../hooks/usePropertiesList"
 import {
     Table,
     TableBody,
@@ -11,11 +12,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { usePropertiesNavigation } from "../hooks/usePropertiesNavigation"
 
-export const PropertyList = () => {
-    const { properties, isLoading, handleOpenFile } = usePropertiesListViewModel()
-    const { navigateToAddProperty } = usePropertiesNavigation();
+export const PropertiesList = () => {
+    const { properties, isLoading, handleOpenFile } = usePropertiesList();
+
+    const navigate = useNavigate();
+    const navigateToAddProperty = () => navigate({ to: "/add-property" });
 
 
     if (isLoading) return <div>Loading...</div>

@@ -8,13 +8,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useManagersListViewModel } from "../hooks/useManagersListViewModel";
-import { useManagersNavigation } from "../hooks/useManagersNavigation";
+import { useManagersQuery } from "../hooks/queries";
+import { useNavigate } from '@tanstack/react-router';
 
 export const ManagersList = () => {
 
-    const { managers, isLoading } = useManagersListViewModel()
-    const { navigateToAddManager } = useManagersNavigation();
+    const { data: managers = [], isLoading } = useManagersQuery();
+    const navigate = useNavigate();
+    const navigateToAddManager = () => navigate({ to: "/add-manager" });
 
     if (isLoading) return <div>Loading...</div>
 

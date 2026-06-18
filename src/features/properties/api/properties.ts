@@ -73,7 +73,7 @@ const uploadOptionalFileAndGetUrl = async (
 export const getSignedUrl = async (path: string): Promise<string> => {
   const { data, error } = await supabase.storage
     .from(PROPERTY_FILES_BUCKET)
-    .createSignedUrl(path, 60); // URL válido por 60 segundos
+    .createSignedUrl(path, 60);
 
   if (error) {
     throw new Error("Error generating signed URL: " + error.message);

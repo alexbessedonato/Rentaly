@@ -1,0 +1,1 @@
+export const MANAGERS_QUERY_KEY = ["managers"];

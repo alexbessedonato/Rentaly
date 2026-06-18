@@ -15,8 +15,8 @@ export const getFilePath = async (
   const cleanProperty = slugify(property.name);
   const date = new Date().toISOString().split("T")[0];
 
-  let insurancePath = null;
-  let contractPath = null;
+  let insurancePath: string | null = null;
+  let contractPath: string | null = null;
 
   if (property.insurance_file) {
     const ext = property.insurance_file.name.split(".").pop();
