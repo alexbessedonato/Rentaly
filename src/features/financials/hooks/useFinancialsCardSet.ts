@@ -1,12 +1,7 @@
-import { toast } from "sonner";
-import { useFinancialsQuery } from "./useFinancialsQuery";
+import { useFinancialsQuery } from "./queries";
 
-export const useFinancialsCardSetViewModel = () => {
-  const { data: financials, isLoading, error } = useFinancialsQuery();
-
-  if (error) {
-    toast.error("Error fetching financials: " + error.message);
-  }
+export const useFinancialsCardSet = () => {
+  const { data: financials, isLoading, isError, error } = useFinancialsQuery();
 
   const cards = [
     {
@@ -26,6 +21,7 @@ export const useFinancialsCardSetViewModel = () => {
   return {
     cards,
     isLoading,
+    isError,
     error,
   };
 };
