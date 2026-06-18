@@ -1,0 +1,1 @@
+export const TENANTS_QUERY_KEY = ["tenants"];

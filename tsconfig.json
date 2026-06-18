@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0", // Ignore deprecation warnings for TypeScript 6.0 and above, should migrate if possible
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

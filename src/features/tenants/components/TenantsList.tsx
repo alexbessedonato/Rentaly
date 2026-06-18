@@ -8,13 +8,16 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useTenantsNavigation } from "../hooks/useTenantsNavigation";
-import { useTenantsListViewModel } from "../hooks/useTenantsListModelView";
+import { useTenantsQuery } from "../hooks/queries";
+import { useNavigate } from "@tanstack/react-router";
+
+
 
 export const TenantsList = () => {
 
-    const { tenants, isLoading } = useTenantsListViewModel()
-    const { navigateToAddTenant } = useTenantsNavigation();
+    const { data: tenants = [], isLoading } = useTenantsQuery();
+    const navigate = useNavigate();
+    const navigateToAddTenant = () => navigate({ to: "/add-tenant" });
 
     if (isLoading) return <div>Loading...</div>
 

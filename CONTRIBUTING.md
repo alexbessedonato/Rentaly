@@ -25,8 +25,8 @@ By submitting code to this repository, you agree your contribution is licensed u
 3. Run checks locally before opening a pull request:
 
 ```bash
-bun run lint
-bun run build
+pnpm run lint
+pnpm run build
 ```
 
 4. Open a PR with:

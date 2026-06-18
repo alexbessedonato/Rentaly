@@ -9,7 +9,7 @@ import { Login } from "@/pages/login/Login";
 import { SignUp } from "@/pages/signUp/SignUp";
 import { AddManager } from "@/pages/addManager/addManager";
 import { AddProperty } from "@/pages/addProperty/addProperty";
-import { AddTenant } from "@/pages/addTenant/addTenant";
+import { AddTenantPage } from "@/features/tenants/pages/AddTenantPage";
 
 export const rootRoute = createRootRoute({
   component: MainLayout,
@@ -48,7 +48,7 @@ export const addPropertyRoute = createRoute({
 export const addTenantRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/add-tenant",
-  component: AddTenant,
+  component: AddTenantPage,
 });
 
 const routeTree = rootRoute.addChildren([

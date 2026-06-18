@@ -12,7 +12,6 @@ export const getTenants = async (): Promise<TenantForTable[]> => {
     throw new Error("Error fetching tenants: " + error.message);
   }
 
-  console.log("Fetched tenants with properties:", data); // Debug log
   return data as TenantForTable[];
 };
 

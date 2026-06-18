@@ -19,7 +19,7 @@ This application focuses on practical day-to-day workflows for small and mid-siz
 - Routing: TanStack Router
 - UI: Tailwind CSS, shadcn/ui primitives, Sonner
 - Tooling: ESLint, TypeScript project references
-- Runtime/Package Manager: Bun
+- Package Manager: pnpm
 
 ## Architecture Overview
 
@@ -55,8 +55,8 @@ src/
 
 ### 1) Prerequisites
 
-- Bun >= 1.0
-- Node.js >= 20 (recommended fallback runtime)
+- pnpm >= 9
+- Node.js >= 20
 - A Supabase project with matching tables/storage buckets
 
 ### 2) Environment variables
@@ -71,23 +71,23 @@ VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_anon_key
 ### 3) Install dependencies
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### 4) Start dev server
 
 ```bash
-bun run dev
+pnpm run dev
 ```
 
 Default Vite URL: `http://localhost:5173`
 
 ## Scripts
 
-- `bun run dev`: Start development server
-- `bun run build`: Type-check and create production build
-- `bun run lint`: Run ESLint checks
-- `bun run preview`: Preview production build locally
+- `pnpm run dev`: Start development server
+- `pnpm run build`: Type-check and create production build
+- `pnpm run lint`: Run ESLint checks
+- `pnpm run preview`: Preview production build locally
 
 ## Current Feature Surface
 
