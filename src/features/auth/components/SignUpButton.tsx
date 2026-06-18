@@ -1,8 +1,12 @@
-import { Button } from "@/components/ui/button"
-import { useAuthNavigation } from "../hooks/useAuthNavigation";
+import { useNavigate } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 
 export function SignUpButton() {
-    const { navigateToSignUp } = useAuthNavigation();
+  const navigate = useNavigate();
 
-    return <Button variant="outline" onClick={navigateToSignUp}>Sign Up</Button>
+  return (
+    <Button variant="outline" onClick={() => navigate({ to: "/signup" })}>
+      Sign Up
+    </Button>
+  );
 }

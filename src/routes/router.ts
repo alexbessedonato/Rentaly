@@ -5,8 +5,8 @@ import {
 } from "@tanstack/react-router";
 import { MainLayout } from "../components/layout/MainLayout";
 import { Dashboard } from "@/pages/dashboard/Dashboard";
-import { Login } from "@/pages/login/Login";
-import { SignUp } from "@/pages/signUp/SignUp";
+import { LoginPage } from "@/features/auth/pages/LoginPage";
+import { SignUpPage } from "@/features/auth/pages/SignUpPage";
 import { AddManagerPage } from "@/features/managers/pages/AddManagerPage";
 import { AddPropertyPage } from "@/features/properties/pages/AddPropertyPage";
 import { AddTenantPage } from "@/features/tenants/pages/AddTenantPage";
@@ -24,13 +24,13 @@ export const homeRoute = createRoute({
 export const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
-  component: Login,
+  component: LoginPage,
 });
 
 export const signUpRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/signup",
-  component: SignUp,
+  component: SignUpPage,
 });
 
 export const addManagerRoute = createRoute({
