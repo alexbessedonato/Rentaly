@@ -175,9 +175,9 @@ This project is licensed under the **RealEstateTracker Non-Commercial + No-AI Li
 
 Summary:
 
-- Contributions are welcome.
-- Commercial use is not allowed without written permission.
-- AI/ML training or model-development use is not allowed without written permission.
-- Attribution to Alex Besse Donato is required.
+- Contributions are welcome
+- Commercial use is not allowed without written permission
+- AI/ML training or model-development use is not allowed without written permission
+- Attribution to Alex Besse Donato is required
 
 See [LICENSE](LICENSE), [NOTICE](NOTICE), and [CONTRIBUTING.md](CONTRIBUTING.md) for full terms.
