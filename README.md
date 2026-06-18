@@ -1,65 +1,108 @@
 # RealEstateTracker
 
-RealEstateTracker is a modern property operations dashboard built with React, TypeScript, and Supabase.
-It is structured with a feature-first architecture, production-minded developer tooling, and a clean UI system based on Tailwind + shadcn primitives.
+RealEstateTracker is a property operations dashboard for landlords and small portfolio owners. Track properties, tenants, managers, and finances in one place — built with React, TypeScript, and Supabase.
 
-## Why This Project
+Logged-out visitors see a marketing landing page. Authenticated users get a dashboard with property tables, financial summaries, and management flows for tenants and property managers.
 
-This application focuses on practical day-to-day workflows for small and mid-size property portfolios:
+## Features
 
-- Manage properties and related entities in a clear, task-oriented interface.
-- Keep feature logic maintainable through focused modules.
-- Prioritize readability and velocity over premature abstraction.
+- **Landing page** — hero, feature overview, how-it-works, and sign-up CTAs for unauthenticated users
+- **Properties** — list properties with rent, mortgage, manager, and tenant info; upload insurance and contract documents
+- **Financial overview** — total rent, total mortgage, and net income across the portfolio (via Supabase RPC)
+- **Managers** — track property managers with company and contact details
+- **Tenants** — manage tenants and link them to properties
+- **Authentication** — email login, sign-up, and logout with session-aware UI
 
 ## Tech Stack
 
-- Frontend: React 19, TypeScript, Vite
-- Data + Auth: Supabase
-- State + Data Fetching: TanStack Query
-- Routing: TanStack Router
-- UI: Tailwind CSS, shadcn/ui primitives, Sonner
-- Tooling: ESLint, TypeScript project references
-- Package Manager: pnpm
+| Layer | Tools |
+|---|---|
+| Frontend | React 19, TypeScript, Vite |
+| Routing | TanStack Router |
+| Data fetching | TanStack Query |
+| Auth state | Supabase Auth + Nanostores |
+| Backend | Supabase (Postgres, Storage, RPC) |
+| UI | Tailwind CSS, shadcn/ui, Lucide icons, Sonner |
+| Package manager | pnpm |
 
-## Architecture Overview
-
-The codebase follows a feature-based folder structure.
-Each feature owns its API access, actions, hooks, types, and UI components.
-
-### High-level shape
+## Project Structure
 
 ```text
 src/
-	app/
-	components/
-		layout/
-		ui/
-	features/
-		auth/
-		managers/
-		properties/
-		tenants/
-	lib/
-	pages/
-	routes/
+├── app/                    # App shell (QueryClientProvider, router)
+├── components/
+│   ├── layout/             # NavigationBar, MainLayout, AuthMenu, etc.
+│   └── ui/                 # shadcn primitives (Button, Card, Table, …)
+├── features/
+│   ├── auth/
+│   │   ├── api/            # Supabase auth I/O
+│   │   ├── hooks/mutations.ts
+│   │   ├── store/          # $auth nanostore
+│   │   ├── pages/          # LoginPage, SignUpPage
+│   │   └── components/
+│   ├── properties/
+│   │   ├── api/
+│   │   ├── hooks/          # queries + usePropertiesList
+│   │   ├── pages/          # AddPropertyPage
+│   │   ├── components/
+│   │   ├── constants/
+│   │   └── utils/
+│   ├── managers/
+│   ├── tenants/
+│   └── financials/
+├── pages/
+│   ├── dashboard/          # Auth-gated dashboard shell
+│   └── landing/            # Marketing page + DashboardPreview
+├── routes/                 # TanStack Router route tree
+├── lib/                    # supabaseClient, utils
+└── utils/
 ```
 
-### Design principles
+### Architecture conventions
 
-- Feature isolation: domain logic stays inside each feature folder.
-- Explicit boundaries: `api`, `actions`, `hooks`, and `components` are separated.
-- Pragmatic UI composition: focused tables per feature where useful.
-- Type-safe by default: interfaces represent API contracts and view models.
+Each feature follows a consistent, folder-based layout:
+
+```
+features/{name}/
+├── api/{name}.ts           # Pure Supabase I/O (no React)
+├── hooks/queries.ts        # useXQuery + useAddXMutation
+├── hooks/mutations.ts      # Auth only (login / signup / logout)
+├── hooks/use{X}List.ts     # Screen-level hooks when needed
+├── components/             # Feature UI (lists, forms, buttons)
+├── pages/                  # Route-level screens
+├── constants/              # Query keys, select strings
+├── types.ts
+└── utils/                  # Optional helpers (e.g. file upload paths)
+```
+
+**Key rules:**
+
+- `api/` handles all Supabase reads and writes
+- React Query hooks live in `hooks/queries.ts` (and `hooks/mutations.ts` for auth)
+- Route screens live inside `features/{name}/pages/`
+- Auth session is stored in a Nanostore (`$auth`), not React Query
+- `pages/` holds cross-feature shells (dashboard, landing) — not feature logic
+
+## Routes
+
+| Path | Screen |
+|---|---|
+| `/` | Dashboard (landing page when logged out) |
+| `/login` | Login |
+| `/signup` | Sign up |
+| `/add-property` | Add property form |
+| `/add-manager` | Add manager form |
+| `/add-tenant` | Add tenant form |
 
 ## Local Development
 
-### 1) Prerequisites
+### Prerequisites
 
-- pnpm >= 9
 - Node.js >= 20
-- A Supabase project with matching tables/storage buckets
+- pnpm >= 9
+- A Supabase project with matching tables, storage buckets, and RPC functions
 
-### 2) Environment variables
+### Environment variables
 
 Create a `.env` file in the project root:
 
@@ -68,50 +111,63 @@ VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_anon_key
 ```
 
-### 3) Install dependencies
+### Install and run
 
 ```bash
 pnpm install
-```
-
-### 4) Start dev server
-
-```bash
 pnpm run dev
 ```
 
-Default Vite URL: `http://localhost:5173`
+Dev server: `http://localhost:5173`
 
-## Scripts
+### Scripts
 
-- `pnpm run dev`: Start development server
-- `pnpm run build`: Type-check and create production build
-- `pnpm run lint`: Run ESLint checks
-- `pnpm run preview`: Preview production build locally
+| Command | Description |
+|---|---|
+| `pnpm run dev` | Start development server |
+| `pnpm run build` | Type-check and create production build |
+| `pnpm run preview` | Preview production build locally |
+| `pnpm run lint` | Run ESLint |
 
-## Current Feature Surface
+## Deployment (Vercel)
 
-- Authentication flows (login/signup/logout)
-- Property listing and creation flows
-- Manager listing and creation flows
-- Property-related document links (insurance/contract)
+This is a Vite SPA. Deploy to Vercel (or any static host) with the environment variables above configured in the hosting dashboard.
 
-## Code Quality Notes
+**Vercel settings:**
 
-- Strictly modular feature boundaries keep changes localized.
-- Query hooks and action functions are intentionally separated.
-- UI behavior favors clarity and predictable rendering.
+| Setting | Value |
+|---|---|
+| Framework Preset | Vite |
+| Build Command | `pnpm run build` |
+| Output Directory | `dist` |
+| Install Command | `pnpm install` |
 
-## Deployment Notes
+**Environment variables** (set in Vercel → Settings → Environment Variables):
 
-This is a Vite SPA and can be deployed to any static host (Vercel, Netlify, Cloudflare Pages, S3 + CDN) once environment variables are configured.
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+
+**SPA routing** — add a `vercel.json` at the project root so client-side routes work on refresh:
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
+
+**Supabase auth** — in your Supabase dashboard (Authentication → URL Configuration), set:
+
+- **Site URL** → your production URL (e.g. `https://your-app.vercel.app`)
+- **Redirect URLs** → same URL + `http://localhost:5173`
+
+After pushing to `main`, Vercel auto-deploys. Confirm the latest deployment commit matches your local `main` branch.
 
 ## Roadmap
 
-- Add edit/delete workflows for properties and managers
-- Introduce role-based access control in Supabase policies
-- Add integration and end-to-end tests for key flows
-- Reintroduce reusable table abstractions only after UX patterns stabilize
+- Edit/delete workflows for properties, managers, and tenants
+- Role-based access control via Supabase RLS policies
+- Query `enabled` guards tied to auth status across all features
+- Integration and end-to-end tests for key flows
 
 ## License
 
