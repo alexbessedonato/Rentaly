@@ -1,4 +1,4 @@
-# Contributing to RealEstateTracker
+# Contributing to Rentaly
 
 Thanks for your interest in contributing.
 

@@ -1,6 +1,6 @@
-# RealEstateTracker
+# Rentaly
 
-RealEstateTracker is a property operations dashboard for landlords and small portfolio owners. Track properties, tenants, managers, and finances in one place — built with React, TypeScript, and Supabase.
+Rentaly is a property operations dashboard for landlords and small portfolio owners. Track properties, tenants, managers, and finances in one place — built with React, TypeScript, and Supabase.
 
 Logged-out visitors see a marketing landing page. Authenticated users get a dashboard with property tables, financial summaries, and management flows for tenants and property managers.
 
@@ -171,7 +171,7 @@ After pushing to `main`, Vercel auto-deploys. Confirm the latest deployment comm
 
 ## License
 
-This project is licensed under the **RealEstateTracker Non-Commercial + No-AI License v1.0**.
+This project is licensed under the **Rentaly Non-Commercial + No-AI License v1.0**.
 
 Summary:
 

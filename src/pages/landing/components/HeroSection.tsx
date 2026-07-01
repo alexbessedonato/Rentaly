@@ -31,7 +31,7 @@ export const HeroSection = () => {
           </h1>
 
           <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            RealEstateTracker brings properties, tenants, managers, and finances
+            Rentaly brings properties, tenants, managers, and finances
             into a single dashboard — so you always know what you own, who's
             renting, and how much you're earning.
           </p>
