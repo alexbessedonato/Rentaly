@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useSignUpMutation } from "../hooks/mutations";
 
 export function SignUpPage() {
@@ -58,8 +58,8 @@ export function SignUpPage() {
                 !value ? "El nombre es obligatorio" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Nombre Completo</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Nombre Completo</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -68,11 +68,9 @@ export function SignUpPage() {
                   placeholder="Juan Pérez"
                 />
                 {field.state.meta.errors.length > 0 && (
-                  <p className="text-xs text-red-500">
-                    {field.state.meta.errors.join(", ")}
-                  </p>
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 
@@ -83,8 +81,8 @@ export function SignUpPage() {
                 !value.includes("@") ? "Email inválido" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Email</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -93,11 +91,9 @@ export function SignUpPage() {
                   placeholder="tu@email.com"
                 />
                 {field.state.meta.errors.length > 0 && (
-                  <p className="text-xs text-red-500">
-                    {field.state.meta.errors.join(", ")}
-                  </p>
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 
@@ -108,8 +104,8 @@ export function SignUpPage() {
                 value.length < 6 ? "Mínimo 6 caracteres" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Contraseña</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
                 <Input
                   id={field.name}
                   type="password"
@@ -118,11 +114,9 @@ export function SignUpPage() {
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
                 {field.state.meta.errors.length > 0 && (
-                  <p className="text-xs text-red-500">
-                    {field.state.meta.errors.join(", ")}
-                  </p>
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 
@@ -137,8 +131,8 @@ export function SignUpPage() {
               },
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Confirmar Contraseña</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Confirmar Contraseña</FieldLabel>
                 <Input
                   id={field.name}
                   type="password"
@@ -147,11 +141,9 @@ export function SignUpPage() {
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
                 {field.state.meta.errors.length > 0 && (
-                  <p className="text-xs text-red-500">
-                    {field.state.meta.errors.join(", ")}
-                  </p>
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 

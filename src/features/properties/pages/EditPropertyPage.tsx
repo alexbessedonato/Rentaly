@@ -1,10 +1,12 @@
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { useManagersQuery } from "@/features/managers/hooks/queries";
-import { useAddPropertyMutation } from "../hooks/queries";
+import { useEditPropertyMutation, usePropertiesQuery } from "../hooks/queries";
+import { editPropertyRoute } from "@/routes/router";
+ 
 import {
   Dialog,
   DialogContent,
@@ -21,25 +23,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const AddPropertyPage = () => {
-  const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
-  const addProperty = useAddPropertyMutation();
-  const { data: managers = [] } = useManagersQuery();
+export const EditPropertyPage = () => {
+    const navigate = useNavigate();
+    const navigateToHome = () => navigate({ to: "/" });
+    const { propertyId } = editPropertyRoute.useParams();
+    const { data: properties = [] } = usePropertiesQuery();
+    const property = properties.find((property) => property.id === propertyId);
+    const { data: managers = [] } = useManagersQuery();
+    const editProperty = useEditPropertyMutation();
 
   const form = useForm({
     defaultValues: {
-      name: "",
-      rent: 0,
-      mortgage: 0,
-      address: "",
+      name: property?.name || "",
+      rent: property?.rent || 0,
+      mortgage: property?.mortgage || 0,
+      address: property?.address || "",
       insurance_file: null as File | null,
       contract_file: null as File | null,
-      manager_id: "",
+      manager_id: property?.manager_id ?? "none",
     },
     onSubmit: async ({ value }) => {
-      await addProperty.mutateAsync({
-        ...value,
+      if (!property) return;
+
+      await editProperty.mutateAsync({
+        id: propertyId,
+        name: value.name,
+        address: value.address,
+        rent: value.rent,
+        mortgage: value.mortgage,
+        insurance_file: value.insurance_file,
+        contract_file: value.contract_file,
+        insurance_url: property.insurance_url,
+        contract_url: property.contract_url,
         manager_id:
           !value.manager_id || value.manager_id === "none"
             ? null
@@ -54,10 +69,10 @@ export const AddPropertyPage = () => {
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            Add Property
+            Edit Property
           </DialogTitle>
           <DialogDescription className="text-center">
-            Introduce los datos de la nueva propiedad.
+            Introduce los datos de la propiedad a editar.
           </DialogDescription>
         </DialogHeader>
 
@@ -137,6 +152,9 @@ export const AddPropertyPage = () => {
                 <FieldLabel htmlFor={field.name}>
                   Póliza de seguro (PDF o Imagen)
                 </FieldLabel>
+                <FieldDescription>
+                  Deja vacío si deseas mantener el archivo actual.
+                </FieldDescription>
                 <Input
                   id={field.name}
                   type="file"
@@ -147,11 +165,6 @@ export const AddPropertyPage = () => {
                     field.handleChange(file);
                   }}
                 />
-                {field.state.value instanceof File && (
-                  <FieldDescription>
-                    Seleccionado: {field.state.value.name}
-                  </FieldDescription>
-                )}
               </Field>
             )}
           </form.Field>
@@ -162,6 +175,9 @@ export const AddPropertyPage = () => {
                 <FieldLabel htmlFor={field.name}>
                   Contrato de alquiler (PDF o Imagen)
                 </FieldLabel>
+                <FieldDescription>
+                  Deja vacío si deseas mantener el archivo actual.
+                </FieldDescription>
                 <Input
                   id={field.name}
                   type="file"
@@ -172,11 +188,6 @@ export const AddPropertyPage = () => {
                     field.handleChange(file);
                   }}
                 />
-                {field.state.value instanceof File && (
-                  <FieldDescription>
-                    Seleccionado: {field.state.value.name}
-                  </FieldDescription>
-                )}
               </Field>
             )}
           </form.Field>
@@ -211,11 +222,14 @@ export const AddPropertyPage = () => {
             <Button
               type="submit"
               className="w-full"
-              disabled={form.state.isSubmitting || addProperty.isPending}
+              disabled={
+                form.state.isSubmitting ||
+                editProperty.isPending
+              }
             >
-              {form.state.isSubmitting || addProperty.isPending
-                ? "Añadiendo..."
-                : "Añadir Propiedad"}
+              {form.state.isSubmitting || editProperty.isPending
+                ? "Guardando..."
+                : "Guardar cambios"}
             </Button>
           </DialogFooter>
         </form>

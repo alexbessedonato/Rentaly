@@ -10,6 +10,7 @@ import { SignUpPage } from "@/features/auth/pages/SignUpPage";
 import { AddManagerPage } from "@/features/managers/pages/AddManagerPage";
 import { AddPropertyPage } from "@/features/properties/pages/AddPropertyPage";
 import { AddTenantPage } from "@/features/tenants/pages/AddTenantPage";
+import { EditPropertyPage } from "@/features/properties/pages/EditPropertyPage";
 
 export const rootRoute = createRootRoute({
   component: MainLayout,
@@ -51,6 +52,12 @@ export const addTenantRoute = createRoute({
   component: AddTenantPage,
 });
 
+export const editPropertyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/edit-property/$propertyId",
+  component: EditPropertyPage,
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   loginRoute,
@@ -58,6 +65,7 @@ const routeTree = rootRoute.addChildren([
   addManagerRoute,
   addPropertyRoute,
   addTenantRoute,
+  editPropertyRoute,
 ]);
 
 export const router = createRouter({ routeTree });

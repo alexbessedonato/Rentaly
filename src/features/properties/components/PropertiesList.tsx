@@ -12,12 +12,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import type { PropertyForTable } from "../types"
 
 export const PropertiesList = () => {
     const { properties, isLoading, handleOpenFile } = usePropertiesList();
 
     const navigate = useNavigate();
     const navigateToAddProperty = () => navigate({ to: "/add-property" });
+    const navigateToEditProperty = (property: PropertyForTable) => navigate({ to: "/edit-property/$propertyId", params: { propertyId: property.id }});
 
 
     if (isLoading) return <div>Loading...</div>
@@ -63,7 +65,7 @@ export const PropertiesList = () => {
                                 </TableHeader>
                                 <TableBody className="text-blue-950">
                                     {properties.map((property) => (
-                                        <TableRow key={property.name}>
+                                        <TableRow key={property.name} onClick={() => navigateToEditProperty(property)}>
                                             <TableCell className="text-center">
                                                 <div className="flex flex-col items-center leading-tight">
                                                     <span>{property.name}</span>
@@ -82,8 +84,12 @@ export const PropertiesList = () => {
                                                         variant="outline"
                                                         className="font-bold"
                                                         size="sm"
-                                                        onClick={() => property.insurance_url && void handleOpenFile(property.insurance_url)}
-                                                    >
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (property.insurance_url) {
+                                                                void handleOpenFile(property.insurance_url)  
+                                                            }}}
+                                                        >
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View Insurance
                                                     </Button>
@@ -97,8 +103,12 @@ export const PropertiesList = () => {
                                                         variant="outline"
                                                         className="font-bold"
                                                         size="sm"
-                                                        onClick={() => property.contract_url && void handleOpenFile(property.contract_url)}
-                                                    >
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (property.contract_url) {
+                                                              void handleOpenFile(property.contract_url);
+                                                            }}}
+                                                        >
                                                         <ReceiptText className=" mr-2 h-4 w-4" />
                                                         View Contract
                                                     </Button>

@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { getCurrentUserId } from "@/utils/getCurrentUserId";
-import type { PropertyForTable, PropertyFormValues } from "../types";
+import type { PropertyEditInput, PropertyForTable, PropertyFormValues } from "../types";
 import { PROPERTY_WITH_RELATIONS_SELECT } from "../constants/propertySelect";
 import { getFilePath } from "../utils/getFilePath";
 
@@ -50,10 +50,56 @@ export const addProperty = async (
   }
 };
 
+export const editProperty = async (
+  property: PropertyEditInput,
+): Promise<void> => {
+  const userId = await getCurrentUserId();
+
+  const { insurancePath, contractPath } = await getFilePath(property, userId);
+
+  await uploadOptionalFileAndGetUrl(
+    property.insurance_file,
+    insurancePath,
+    "Error subiendo seguro",
+    true,
+  );
+  await uploadOptionalFileAndGetUrl(
+    property.contract_file,
+    contractPath,
+    "Error subiendo contrato",
+    true,
+  );
+
+  const finalInsuranceUrl = property.insurance_file
+    ? insurancePath
+    : property.insurance_url;
+  const finalContractUrl = property.contract_file
+    ? contractPath
+    : property.contract_url;
+
+  const { error } = await supabase
+    .from("property")
+    .update({
+      name: property.name,
+      address: property.address,
+      rent: property.rent,
+      mortgage: property.mortgage,
+      manager_id: property.manager_id,
+      insurance_url: finalInsuranceUrl,
+      contract_url: finalContractUrl,
+    })
+    .eq("id", property.id);
+
+  if (error) {
+    throw new Error("Error updating property: " + error.message);
+  }
+};
+
 const uploadOptionalFileAndGetUrl = async (
   file: File | null,
   path: string | null,
   errorPrefix: string,
+  upsert = false,
 ): Promise<void> => {
   if (!file || !path) {
     return;
@@ -61,7 +107,7 @@ const uploadOptionalFileAndGetUrl = async (
 
   const { error } = await supabase.storage
     .from(PROPERTY_FILES_BUCKET)
-    .upload(path, file);
+    .upload(path, file, { upsert });
 
   if (error) {
     throw new Error(

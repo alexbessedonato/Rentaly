@@ -2,7 +2,7 @@ import { usePropertiesQuery } from "@/features/properties/hooks/queries";
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -67,8 +67,8 @@ export const AddTenantPage = () => {
         >
           <form.Field name="full_name">
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Nombre</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Nombre</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -76,7 +76,7 @@ export const AddTenantPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="nombre del inquilino"
                 />
-              </div>
+              </Field>
             )}
           </form.Field>
 
@@ -87,8 +87,8 @@ export const AddTenantPage = () => {
                 !value.includes("@") ? "Email inválido" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Email</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -96,10 +96,10 @@ export const AddTenantPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="ejemplo@correo.com"
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 
@@ -116,8 +116,8 @@ export const AddTenantPage = () => {
             }}
           >
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Teléfono</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Teléfono</FieldLabel>
                 <Input
                   id={field.name}
                   type="tel"
@@ -126,17 +126,17 @@ export const AddTenantPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="número de teléfono"
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           </form.Field>
 
           <form.Field name="property_id">
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Propiedad (Opcional)</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Propiedad (Opcional)</FieldLabel>
                 <Select
                   value={field.state.value}
                   onValueChange={field.handleChange}
@@ -155,7 +155,7 @@ export const AddTenantPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </Field>
             )}
           </form.Field>
 
