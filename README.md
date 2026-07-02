@@ -131,7 +131,7 @@ Dev server: `http://localhost:5173`
 
 ## Deployment (Vercel)
 
-This is a Vite SPA. Deploy to Vercel (or any static host) with the environment variables above configured in the hosting dashboard.
+This is a Vite SPA, deploy to Vercel (or any static host) with the environment variables above configured in the hosting dashboard.
 
 **Vercel settings:**
 
