@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useLoginMutation } from "../hooks/mutations";
 
 export function LoginPage() {
@@ -54,8 +54,8 @@ export function LoginPage() {
                 !value.includes("@") ? "Email inválido" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Email</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -63,10 +63,10 @@ export function LoginPage() {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="ejemplo@correo.com"
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 
@@ -77,8 +77,8 @@ export function LoginPage() {
                 value.length < 6 ? "Mínimo 6 caracteres" : undefined,
             }}
             children={(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Contraseña</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
                 <Input
                   id={field.name}
                   type="password"
@@ -86,10 +86,10 @@ export function LoginPage() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           />
 

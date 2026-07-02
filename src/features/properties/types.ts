@@ -34,6 +34,7 @@ export interface PropertyForTable {
   mortgage: number;
   insurance_url: string | null;
   contract_url: string | null;
+  manager_id: string | null;
   manager: {
     name: string;
   } | null;
@@ -42,4 +43,10 @@ export interface PropertyForTable {
         full_name: string;
       }[]
     | null;
+}
+
+export interface PropertyEditInput extends PropertyFormValues {
+  id: string;
+  insurance_url: string | null;
+  contract_url: string | null;
 }

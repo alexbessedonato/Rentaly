@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { useAddManagerMutation } from "../hooks/queries";
 
@@ -53,8 +53,8 @@ export const AddManagerPage = () => {
         >
           <form.Field name="name">
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Nombre</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Nombre</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -62,14 +62,14 @@ export const AddManagerPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="nombre del manager"
                 />
-              </div>
+              </Field>
             )}
           </form.Field>
 
           <form.Field name="company">
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Empresa</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Empresa</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -77,7 +77,7 @@ export const AddManagerPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="nombre de la empresa"
                 />
-              </div>
+              </Field>
             )}
           </form.Field>
 
@@ -89,8 +89,8 @@ export const AddManagerPage = () => {
             }}
           >
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Email</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   value={field.state.value}
@@ -98,10 +98,10 @@ export const AddManagerPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="correo electrónico"
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           </form.Field>
 
@@ -118,8 +118,8 @@ export const AddManagerPage = () => {
             }}
           >
             {(field) => (
-              <div className="space-y-1">
-                <Label htmlFor={field.name}>Teléfono</Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Teléfono</FieldLabel>
                 <Input
                   id={field.name}
                   type="tel"
@@ -128,10 +128,10 @@ export const AddManagerPage = () => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="número de teléfono"
                 />
-                {field.state.meta.errors && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
                 )}
-              </div>
+              </Field>
             )}
           </form.Field>
 
