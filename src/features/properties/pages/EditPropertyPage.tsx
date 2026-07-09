@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { useManagersQuery } from "@/features/managers/hooks/queries";
-import { useEditPropertyMutation, usePropertiesQuery } from "../hooks/queries";
+import { useDeletePropertyMutation, useEditPropertyMutation, usePropertiesQuery } from "../hooks/queries";
 import { editPropertyRoute } from "@/routes/router";
  
 import {
@@ -22,8 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
+import { GenericAlertDialog } from "@/components/layout/GenericAlertDialog";
 
 export const EditPropertyPage = () => {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  
     const navigate = useNavigate();
     const navigateToHome = () => navigate({ to: "/" });
     const { propertyId } = editPropertyRoute.useParams();
@@ -31,6 +36,7 @@ export const EditPropertyPage = () => {
     const property = properties.find((property) => property.id === propertyId);
     const { data: managers = [] } = useManagersQuery();
     const editProperty = useEditPropertyMutation();
+    const deleteProperty = useDeletePropertyMutation();
 
   const form = useForm({
     defaultValues: {
@@ -65,6 +71,7 @@ export const EditPropertyPage = () => {
   });
 
   return (
+    <>
     <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
@@ -232,8 +239,35 @@ export const EditPropertyPage = () => {
                 : "Guardar cambios"}
             </Button>
           </DialogFooter>
+
+          <DialogFooter className="pt-4">
+            <Button
+              type="button"
+              variant="destructive"
+              className="w-full"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Eliminar Propiedad
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
+
+    <GenericAlertDialog
+      open={showDeleteDialog}
+      onOpenChange={(open) => {
+        if (!deleteProperty.isPending) setShowDeleteDialog(open);
+      }}
+      isPending={deleteProperty.isPending}
+      title="Eliminar Propiedad"
+      description="¿Estás seguro de querer eliminar esta propiedad?"
+      onConfirm={async () => {
+        await deleteProperty.mutateAsync(propertyId);
+        navigateToHome();
+      }}
+      onCancel={() => setShowDeleteDialog(false)}
+    />
+    </>
   );
 };

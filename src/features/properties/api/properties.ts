@@ -29,11 +29,13 @@ export const addProperty = async (
     property.insurance_file,
     insurancePath,
     "Error subiendo seguro",
+    true,
   );
   await uploadOptionalFileAndGetUrl(
     property.contract_file,
     contractPath,
     "Error subiendo contrato",
+    true,
   );
 
   const { insurance_file, contract_file, ...cleanPropertyData } = property;
@@ -49,6 +51,49 @@ export const addProperty = async (
     throw new Error("Error adding property: " + DbError.message);
   }
 };
+
+export const deleteProperty = async (propertyId: string): Promise<void> => {
+  const userId = await getCurrentUserId();
+
+  // 1. Get file paths before deleting the row
+  const {data: propertyContractUrls, error: fetchError} = await supabase
+  .from("property")
+  .select("insurance_url, contract_url")
+  .eq("id", propertyId)
+  .single()
+
+  if (fetchError) throw new Error("Error fetching property contract urls: " + fetchError.message)
+
+  // 2. Unlink property from tenants
+  const {error: unlinkError} = await supabase
+  .from("tenant")
+  .update({ property_id: null })
+  .eq("property_id", propertyId)
+
+  if (unlinkError) throw new Error("Error unlinking property from tenants: " + unlinkError.message)
+
+  // 3. Delete files from storage
+  const pathsToDelete = [propertyContractUrls.insurance_url, propertyContractUrls.contract_url].filter(
+    (path): path is string => Boolean(path),
+  );
+
+  if (pathsToDelete.length > 0) {
+    const { error: storageError } = await supabase.storage
+      .from(PROPERTY_FILES_BUCKET)
+      .remove(pathsToDelete);
+
+    if (storageError) throw new Error("Error deleting files: " + storageError.message);
+  }
+
+  // 4. Delete property row
+  const { error: deleteError } = await supabase
+  .from("property")
+  .delete()
+  .eq("id", propertyId)
+  .eq("user_id", userId)
+
+  if (deleteError) throw new Error("Error deleting property: " + deleteError.message)
+}
 
 export const editProperty = async (
   property: PropertyEditInput,
@@ -76,7 +121,7 @@ export const editProperty = async (
   const finalContractUrl = property.contract_file
     ? contractPath
     : property.contract_url;
-
+    
   const { error } = await supabase
     .from("property")
     .update({
