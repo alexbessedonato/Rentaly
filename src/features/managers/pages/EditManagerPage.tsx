@@ -24,7 +24,7 @@ export const EditManagerPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { managerId } = editManagerRoute.useParams();
   const { data: managers = [] } = useManagersQuery();
   const manager = managers.find((m) => m.id === managerId);
@@ -48,13 +48,13 @@ export const EditManagerPage = () => {
         email: value.email || null,
         phone: value.phone || null,
       });
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
     <>
-      <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+      <Dialog open={true}>
         <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
@@ -194,7 +194,7 @@ export const EditManagerPage = () => {
         description={`¿Estás seguro de querer eliminar a "${manager?.name}"? Las propiedades asignadas quedarán sin manager.`}
         onConfirm={async () => {
           await deleteManager.mutateAsync(managerId);
-          navigateToHome();
+          navigateToDashboard();
         }}
         onCancel={() => setShowDeleteDialog(false)}
       />

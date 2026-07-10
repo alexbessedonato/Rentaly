@@ -6,12 +6,13 @@ Logged-out visitors see a marketing landing page. Authenticated users get a dash
 
 ## Features
 
-- **Landing page** — hero, feature overview, how-it-works, and sign-up CTAs for unauthenticated users
-- **Properties** — list properties with rent, mortgage, manager, and tenant info; upload insurance and contract documents
+- **Landing page** — hero, feature overview, how-it-works, and sign-up CTAs at `/` for unauthenticated users
+- **Dashboard** — authenticated portfolio view at `/dashboard` with properties, financials, managers, and tenants
+- **Properties** — list, add, edit, and delete properties with rent, mortgage, manager, and tenant info; upload insurance and contract documents to Supabase Storage
 - **Financial overview** — total rent, total mortgage, and net income across the portfolio (via Supabase RPC)
-- **Managers** — track property managers with company and contact details
-- **Tenants** — manage tenants and link them to properties
-- **Authentication** — email login, sign-up, and logout with session-aware UI
+- **Managers** — add, edit, and delete property managers with company and contact details; deleting a manager unlinks their properties
+- **Tenants** — add, edit, and delete tenants and link them to properties; deleting a tenant unlinks them from their property
+- **Authentication** — email login, sign-up, and logout with session-aware UI and route guards (protected routes redirect to `/login`; login/signup redirect to `/dashboard` when already authenticated)
 
 ## Tech Stack
 
@@ -43,12 +44,14 @@ src/
 │   ├── properties/
 │   │   ├── api/
 │   │   ├── hooks/          # queries + usePropertiesList
-│   │   ├── pages/          # AddPropertyPage
+│   │   ├── pages/          # AddPropertyPage, EditPropertyPage
 │   │   ├── components/
 │   │   ├── constants/
 │   │   └── utils/
 │   ├── managers/
+│   │   └── pages/          # AddManagerPage, EditManagerPage
 │   ├── tenants/
+│   │   └── pages/          # AddTenantPage, EditTenantPage
 │   └── financials/
 ├── pages/
 │   ├── dashboard/          # Auth-gated dashboard shell
@@ -82,17 +85,25 @@ features/{name}/
 - Route screens live inside `features/{name}/pages/`
 - Auth session is stored in a Nanostore (`$auth`), not React Query
 - `pages/` holds cross-feature shells (dashboard, landing) — not feature logic
+- Route guards live in `routes/router.ts` using `beforeLoad` + `throw redirect()` against the `$auth` nanostore
+- Data writes are scoped per user: properties use `user_id`; managers and tenants use `owner_id`
 
 ## Routes
 
-| Path | Screen |
-|---|---|
-| `/` | Dashboard (landing page when logged out) |
-| `/login` | Login |
-| `/signup` | Sign up |
-| `/add-property` | Add property form |
-| `/add-manager` | Add manager form |
-| `/add-tenant` | Add tenant form |
+| Path | Screen | Auth |
+|---|---|---|
+| `/` | Landing page | Public |
+| `/dashboard` | Dashboard (properties, financials, managers, tenants) | Protected |
+| `/login` | Login | Public (redirects to `/dashboard` if logged in) |
+| `/signup` | Sign up | Public (redirects to `/dashboard` if logged in) |
+| `/add-property` | Add property form | Protected |
+| `/edit-property/$propertyId` | Edit property form (with delete) | Protected |
+| `/add-manager` | Add manager form | Protected |
+| `/edit-manager/$managerId` | Edit manager form (with delete) | Protected |
+| `/add-tenant` | Add tenant form | Protected |
+| `/edit-tenant/$tenantId` | Edit tenant form (with delete) | Protected |
+
+Click a row in the properties, managers, or tenants table to open its edit page.
 
 ## Local Development
 
@@ -164,9 +175,9 @@ After pushing to `main`, Vercel auto-deploys. Confirm the latest deployment comm
 
 ## Roadmap
 
-- Edit/delete workflows for properties, managers, and tenants
 - Role-based access control via Supabase RLS policies
 - Query `enabled` guards tied to auth status across all features
+- Property detail page and portfolio search
 - Integration and end-to-end tests for key flows
 
 ## License

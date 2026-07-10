@@ -32,7 +32,7 @@ export const EditTenantPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { tenantId } = editTenantRoute.useParams();
   const { data: tenants = [] } = useTenantsQuery();
   const { data: properties = [] } = usePropertiesQuery();
@@ -60,13 +60,13 @@ export const EditTenantPage = () => {
             ? null
             : value.property_id,
       });
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
     <>
-      <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+      <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
         <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
@@ -221,7 +221,7 @@ export const EditTenantPage = () => {
         }`}
         onConfirm={async () => {
           await deleteTenant.mutateAsync(tenantId);
-          navigateToHome();
+          navigateToDashboard();
         }}
         onCancel={() => setShowDeleteDialog(false)}
       />

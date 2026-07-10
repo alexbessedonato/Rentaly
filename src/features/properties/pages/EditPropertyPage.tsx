@@ -30,7 +30,7 @@ export const EditPropertyPage = () => {
 
   
     const navigate = useNavigate();
-    const navigateToHome = () => navigate({ to: "/" });
+    const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
     const { propertyId } = editPropertyRoute.useParams();
     const { data: properties = [] } = usePropertiesQuery();
     const property = properties.find((property) => property.id === propertyId);
@@ -66,13 +66,13 @@ export const EditPropertyPage = () => {
             ? null
             : value.manager_id,
       });
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
     <>
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
@@ -265,7 +265,7 @@ export const EditPropertyPage = () => {
       description="¿Estás seguro de querer eliminar esta propiedad?"
       onConfirm={async () => {
         await deleteProperty.mutateAsync(propertyId);
-        navigateToHome();
+        navigateToDashboard();
       }}
       onCancel={() => setShowDeleteDialog(false)}
     />
