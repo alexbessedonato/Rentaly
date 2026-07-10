@@ -246,6 +246,7 @@ export const EditPropertyPage = () => {
               variant="destructive"
               className="w-full"
               onClick={() => setShowDeleteDialog(true)}
+              disabled={deleteProperty.isPending}
             >
               Eliminar Propiedad
             </Button>

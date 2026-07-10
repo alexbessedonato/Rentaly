@@ -8,6 +8,7 @@ import { Dashboard } from "@/pages/dashboard/Dashboard";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { SignUpPage } from "@/features/auth/pages/SignUpPage";
 import { AddManagerPage } from "@/features/managers/pages/AddManagerPage";
+import { EditManagerPage } from "@/features/managers/pages/EditManagerPage";
 import { AddPropertyPage } from "@/features/properties/pages/AddPropertyPage";
 import { AddTenantPage } from "@/features/tenants/pages/AddTenantPage";
 import { EditPropertyPage } from "@/features/properties/pages/EditPropertyPage";
@@ -58,6 +59,12 @@ export const editPropertyRoute = createRoute({
   component: EditPropertyPage,
 });
 
+export const editManagerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/edit-manager/$managerId",
+  component: EditManagerPage,
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   loginRoute,
@@ -66,6 +73,7 @@ const routeTree = rootRoute.addChildren([
   addPropertyRoute,
   addTenantRoute,
   editPropertyRoute,
+  editManagerRoute,
 ]);
 
 export const router = createRouter({ routeTree });
