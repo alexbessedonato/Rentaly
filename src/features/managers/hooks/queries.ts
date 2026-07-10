@@ -1,9 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getManagers, addManager } from "../api/managers";
+import { getManagers, addManager, editManager, deleteManager } from "../api/managers";
 import { MANAGERS_QUERY_KEY } from "../constants/managersQueryKey";
-import type { AddManagerInput } from "../types";
+import type { AddManagerInput, ManagerEditInput } from "../types";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { PROPERTIES_QUERY_KEY } from "@/features/properties/constants/propertiesQueryKey";
 
 export const useManagersQuery = () => {
   return useQuery({
@@ -16,13 +17,51 @@ export const useAddManagerMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-  mutationFn: (manager: AddManagerInput) => addManager(manager),
-  onSuccess: () => {
-    toast.success("Manager añadido con éxito");
-    queryClient.invalidateQueries({ queryKey: MANAGERS_QUERY_KEY });
-  },
-  onError: (error: unknown) => {
-    toast.error("Error al añadir manager", { description: getErrorMessage(error) });
-  },
-});
+    mutationFn: (manager: AddManagerInput) => addManager(manager),
+    onSuccess: () => {
+      toast.success("Manager añadido con éxito");
+      queryClient.invalidateQueries({ queryKey: MANAGERS_QUERY_KEY });
+    },
+    onError: (error: unknown) => {
+      toast.error("Error al añadir manager", {
+        description: getErrorMessage(error),
+      });
+    },
+  });
+};
+
+export const useEditManagerMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (manager: ManagerEditInput) => editManager(manager),
+    onSuccess: () => {
+      toast.success("Manager actualizado con éxito");
+      queryClient.invalidateQueries({ queryKey: MANAGERS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: PROPERTIES_QUERY_KEY });
+    },
+    onError: (error: unknown) => {
+      toast.error("Error al actualizar manager", {
+        description: getErrorMessage(error),
+      });
+    },
+  });
+};
+
+export const useDeleteManagerMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (managerId: string) => deleteManager(managerId),
+    onSuccess: () => {
+      toast.success("Manager eliminado con éxito");
+      queryClient.invalidateQueries({ queryKey: MANAGERS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: PROPERTIES_QUERY_KEY });
+    },
+    onError: (error: unknown) => {
+      toast.error("Error al eliminar manager", {
+        description: getErrorMessage(error),
+      });
+    },
+  });
 };

@@ -10,12 +10,15 @@ import {
 } from "@/components/ui/table"
 import { useManagersQuery } from "../hooks/queries";
 import { useNavigate } from '@tanstack/react-router';
+import type { Manager } from "../types";
 
 export const ManagersList = () => {
 
     const { data: managers = [], isLoading } = useManagersQuery();
     const navigate = useNavigate();
     const navigateToAddManager = () => navigate({ to: "/add-manager" });
+    const navigateToEditManager = (manager: Manager) =>
+        navigate({ to: "/edit-manager/$managerId", params: { managerId: manager.id } });
 
     if (isLoading) return <div>Loading...</div>
 
@@ -52,7 +55,7 @@ export const ManagersList = () => {
                                 </TableHeader>
                                 <TableBody className="text-blue-950">
                                     {managers.map((manager) => (
-                                        <TableRow key={manager.id}>
+                                        <TableRow key={manager.id} onClick={() => navigateToEditManager(manager)}>
                                             <TableCell className="text-center">{manager.name ?? "-"}</TableCell>
                                             <TableCell className="text-center">{manager.company ?? "-"}</TableCell>
                                             <TableCell className="text-center">{manager.email ?? "-"}</TableCell>

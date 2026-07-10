@@ -23,3 +23,7 @@ export type AddManagerInput = {
 };
 
 export type ManagerUpdate = Partial<AddManagerInput>;
+
+export interface ManagerEditInput extends AddManagerInput {
+  id: string;
+}
