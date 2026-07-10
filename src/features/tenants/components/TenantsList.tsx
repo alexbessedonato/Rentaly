@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/table"
 import { useTenantsQuery } from "../hooks/queries";
 import { useNavigate } from "@tanstack/react-router";
-
-
+import type { TenantForTable } from "../types";
 
 export const TenantsList = () => {
 
     const { data: tenants = [], isLoading } = useTenantsQuery();
     const navigate = useNavigate();
     const navigateToAddTenant = () => navigate({ to: "/add-tenant" });
+    const navigateToEditTenant = (tenant: TenantForTable) =>
+        navigate({ to: "/edit-tenant/$tenantId", params: { tenantId: tenant.id } });
 
     if (isLoading) return <div>Loading...</div>
 
@@ -55,7 +56,7 @@ export const TenantsList = () => {
                                 </TableHeader>
                                 <TableBody className="text-blue-950">
                                     {tenants.map((tenant) => (
-                                        <TableRow key={`${tenant.full_name}-${tenant.email ?? tenant.phone ?? "-"}`}>
+                                        <TableRow key={tenant.id} onClick={() => navigateToEditTenant(tenant)}>
                                             <TableCell className="text-center">{tenant.full_name ?? "-"}</TableCell>
                                             <TableCell className="text-center">{tenant.property?.name ?? "-"}</TableCell>
                                             <TableCell className="text-center">{tenant.email ?? "-"}</TableCell>
