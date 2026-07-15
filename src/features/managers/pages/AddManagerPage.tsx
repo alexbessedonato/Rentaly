@@ -15,7 +15,7 @@ import { useAddManagerMutation } from "../hooks/queries";
 
 export const AddManagerPage = () => {
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const addManager = useAddManagerMutation();
 
   const form = useForm({
@@ -27,12 +27,12 @@ export const AddManagerPage = () => {
     },
     onSubmit: async ({ value }) => {
       await addManager.mutateAsync(value);
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

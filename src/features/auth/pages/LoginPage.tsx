@@ -15,7 +15,7 @@ import { useLoginMutation } from "../hooks/mutations";
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true});
   const login = useLoginMutation();
 
   const form = useForm({
@@ -25,12 +25,12 @@ export function LoginPage() {
     },
     onSubmit: async ({ value }) => {
       await login.mutateAsync(value);
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+    <Dialog open={true}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">Login</DialogTitle>

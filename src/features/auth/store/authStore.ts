@@ -13,3 +13,7 @@ export const setAuth = (user: User | null) => {
     status: user ? 'authenticated' : 'unauthenticated'
   })
 }
+
+export const getAuthStatus = () => {
+  return $auth.get().status;
+}

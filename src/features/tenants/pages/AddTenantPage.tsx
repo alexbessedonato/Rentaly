@@ -24,7 +24,7 @@ import { useAddTenantMutation } from "../hooks/queries";
 export const AddTenantPage = () => {
   const addTenant = useAddTenantMutation();
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { data: properties } = usePropertiesQuery();
 
   const form = useForm({
@@ -41,12 +41,12 @@ export const AddTenantPage = () => {
         phone: value.phone || null,
         property_id: value.property_id === "none" ? null : value.property_id,
       });
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

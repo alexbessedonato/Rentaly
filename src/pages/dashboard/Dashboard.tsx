@@ -4,7 +4,6 @@ import { PropertiesList } from "@/features/properties/components/PropertiesList"
 import { TenantsList } from "@/features/tenants/components/TenantsList";
 import { $auth } from "@/features/auth/store/authStore";
 import { useStore } from "@nanostores/react";
-import { LandingPage } from "@/pages/landing/LandingPage";
 import { LandingPageSkeleton } from "@/pages/landing/LandingPageSkeleton";
 
 export const Dashboard = () => {
@@ -12,10 +11,6 @@ export const Dashboard = () => {
 
   if (auth.status === "loading") {
     return <LandingPageSkeleton />;
-  }
-
-  if (auth.status !== "authenticated") {
-    return <LandingPage />;
   }
 
   return (
@@ -27,3 +22,4 @@ export const Dashboard = () => {
     </section>
   );
 };
+

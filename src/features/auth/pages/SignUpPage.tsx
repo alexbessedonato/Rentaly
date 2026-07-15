@@ -12,10 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useSignUpMutation } from "../hooks/mutations";
+import { getAuthStatus } from "../store/authStore";
 
 export function SignUpPage() {
   const navigate = useNavigate();
-  const navigateToHome = () => navigate({ to: "/" });
+  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
+  const navigateToLanding = () => navigate({ to: "/", replace: true });
   const signUp = useSignUpMutation();
 
   const form = useForm({
@@ -27,12 +29,16 @@ export function SignUpPage() {
     },
     onSubmit: async ({ value }) => {
       await signUp.mutateAsync(value);
-      navigateToHome();
+      navigateToDashboard();
     },
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToHome()}>
+    <Dialog open={true} onOpenChange={(open) => {if (!open && getAuthStatus() === "authenticated") {
+      navigateToDashboard();
+    } else {
+      navigateToLanding();
+    }}}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
