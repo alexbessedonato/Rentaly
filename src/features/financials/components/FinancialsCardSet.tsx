@@ -2,9 +2,7 @@ import { useFinancialsCardSet } from "../hooks/useFinancialsCardSet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const FinancialsCardSet = () => {
-  const { cards, isLoading, isError } = useFinancialsCardSet();
-
-  if (isLoading) return <p>Loading...</p>;
+  const { cards, isError } = useFinancialsCardSet();
 
   if (isError) {
     return <p className="text-sm text-red-600">Error loading financial data.</p>;

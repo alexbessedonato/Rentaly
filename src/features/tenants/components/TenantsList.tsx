@@ -14,13 +14,11 @@ import type { TenantForTable } from "../types";
 
 export const TenantsList = () => {
 
-    const { data: tenants = [], isLoading } = useTenantsQuery();
+    const { data: tenants = [] } = useTenantsQuery();
     const navigate = useNavigate();
     const navigateToAddTenant = () => navigate({ to: "/add-tenant" });
     const navigateToEditTenant = (tenant: TenantForTable) =>
         navigate({ to: "/edit-tenant/$tenantId", params: { tenantId: tenant.id } });
-
-    if (isLoading) return <div>Loading...</div>
 
     return (
 

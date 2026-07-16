@@ -4,8 +4,7 @@ import { getSignedUrl } from "../api/properties";
 import { usePropertiesQuery } from "./queries";
 
 export const usePropertiesList = () => {
-  const { data: properties = [], isLoading, isError, error } =
-    usePropertiesQuery();
+  const { data: properties = [] } = usePropertiesQuery();
 
   const handleOpenFile = async (filePath: string) => {
     try {
@@ -20,9 +19,6 @@ export const usePropertiesList = () => {
 
   return {
     properties,
-    isLoading,
-    isError,
-    error,
     handleOpenFile,
   };
 };

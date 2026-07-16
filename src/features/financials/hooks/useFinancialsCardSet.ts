@@ -1,7 +1,7 @@
 import { useFinancialsQuery } from "./queries";
 
 export const useFinancialsCardSet = () => {
-  const { data: financials, isLoading, isError, error } = useFinancialsQuery();
+  const { data: financials, isError } = useFinancialsQuery();
 
   const cards = [
     {
@@ -20,8 +20,6 @@ export const useFinancialsCardSet = () => {
 
   return {
     cards,
-    isLoading,
     isError,
-    error,
   };
 };
