@@ -6,11 +6,14 @@ import type { PropertyEditInput, PropertyFormValues } from "../types";
 import { PROPERTIES_QUERY_KEY } from "../constants/propertiesQueryKey";
 import { FINANCIALS_QUERY_KEY } from "@/features/financials/constants/financialsQueryKey";
 import { TENANTS_QUERY_KEY } from "@/features/tenants/constants/tenantsQueryKey";
+import { getAuthStatus } from "@/features/auth/store/authStore";
 
 export const usePropertiesQuery = () => {
+  const auth = getAuthStatus();
   return useQuery({
     queryKey: PROPERTIES_QUERY_KEY,
     queryFn: getProperties,
+    enabled: auth === "authenticated"
   });
 };
 

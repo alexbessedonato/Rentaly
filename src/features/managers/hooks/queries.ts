@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAuthStatus } from "@/features/auth/store/authStore";
 import { getManagers, addManager, editManager, deleteManager } from "../api/managers";
 import { MANAGERS_QUERY_KEY } from "../constants/managersQueryKey";
 import type { AddManagerInput, ManagerEditInput } from "../types";
@@ -7,9 +8,11 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 import { PROPERTIES_QUERY_KEY } from "@/features/properties/constants/propertiesQueryKey";
 
 export const useManagersQuery = () => {
+  const auth = getAuthStatus();
   return useQuery({
     queryKey: MANAGERS_QUERY_KEY,
     queryFn: getManagers,
+    enabled: auth === "authenticated",
   });
 };
 
