@@ -14,13 +14,11 @@ import type { Manager } from "../types";
 
 export const ManagersList = () => {
 
-    const { data: managers = [], isLoading } = useManagersQuery();
+    const { data: managers = [] } = useManagersQuery();
     const navigate = useNavigate();
     const navigateToAddManager = () => navigate({ to: "/add-manager" });
     const navigateToEditManager = (manager: Manager) =>
         navigate({ to: "/edit-manager/$managerId", params: { managerId: manager.id } });
-
-    if (isLoading) return <div>Loading...</div>
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

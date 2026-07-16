@@ -15,14 +15,11 @@ import {
 import type { PropertyForTable } from "../types"
 
 export const PropertiesList = () => {
-    const { properties, isLoading, handleOpenFile } = usePropertiesList();
+    const { properties, handleOpenFile } = usePropertiesList();
 
     const navigate = useNavigate();
     const navigateToAddProperty = () => navigate({ to: "/add-property" });
     const navigateToEditProperty = (property: PropertyForTable) => navigate({ to: "/edit-property/$propertyId", params: { propertyId: property.id }});
-
-
-    if (isLoading) return <div>Loading...</div>
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
