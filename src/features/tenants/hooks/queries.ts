@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useStore } from "@nanostores/react";
 import { toast } from "sonner";
-import { getAuthStatus } from "@/features/auth/store/authStore";
+import { $auth } from "@/features/auth/store/authStore";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { addTenant, deleteTenant, editTenant, getTenants } from "../api/tenants";
 import type { AddTenantInput, TenantEditInput } from "../types";
@@ -8,11 +9,11 @@ import { TENANTS_QUERY_KEY } from "../constants/tenantsQueryKey";
 import { PROPERTIES_QUERY_KEY } from "@/features/properties/constants/propertiesQueryKey";
 
 export const useTenantsQuery = () => {
-  const auth = getAuthStatus();
+  const { status } = useStore($auth);
   return useQuery({
     queryKey: TENANTS_QUERY_KEY,
     queryFn: getTenants,
-    enabled: auth === "authenticated",
+    enabled: status === "authenticated",
   });
 };
 
