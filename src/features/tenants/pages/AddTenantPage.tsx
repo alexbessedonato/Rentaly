@@ -19,11 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useAddTenantMutation } from "../hooks/queries";
 
 export const AddTenantPage = () => {
   const addTenant = useAddTenantMutation();
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog();
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { data: properties } = usePropertiesQuery();
 
@@ -46,7 +48,7 @@ export const AddTenantPage = () => {
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

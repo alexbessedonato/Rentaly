@@ -16,6 +16,7 @@ import { EditTenantPage } from "@/features/tenants/pages/EditTenantPage";
 import { EditPropertyPage } from "@/features/properties/pages/EditPropertyPage";
 import { LandingPage } from "@/pages/landing/LandingPage";
 import { getAuthStatus } from "@/features/auth/store/authStore";
+import { supabase } from "@/lib/supabaseClient";
 
 export const rootRoute = createRootRoute({
   component: MainLayout,
@@ -26,9 +27,8 @@ export const homeRoute = createRoute({
   path: "/",
   component: LandingPage,
   beforeLoad: async () => {
-    if (getAuthStatus() === "authenticated") {
-      throw redirect({ to: "/dashboard" , replace: true });
-    }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) throw redirect({ to: "/dashboard" , replace: true });
   },
 });
 

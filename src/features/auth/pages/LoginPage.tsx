@@ -11,10 +11,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useLoginMutation } from "../hooks/mutations";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog("/");
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true});
   const login = useLoginMutation();
 
@@ -30,7 +32,7 @@ export function LoginPage() {
   });
 
   return (
-    <Dialog open={true}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">Login</DialogTitle>

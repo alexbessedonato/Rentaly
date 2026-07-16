@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GenericAlertDialog } from "@/components/layout/GenericAlertDialog";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { editTenantRoute } from "@/routes/router";
 import {
   useDeleteTenantMutation,
@@ -32,6 +33,7 @@ export const EditTenantPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog();
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { tenantId } = editTenantRoute.useParams();
   const { data: tenants = [] } = useTenantsQuery();
@@ -66,7 +68,7 @@ export const EditTenantPage = () => {
 
   return (
     <>
-      <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+      <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
         <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">

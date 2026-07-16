@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { useManagersQuery } from "@/features/managers/hooks/queries";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useAddPropertyMutation } from "../hooks/queries";
 import {
   Dialog,
@@ -23,6 +24,7 @@ import {
 
 export const AddPropertyPage = () => {
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog();
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const addProperty = useAddPropertyMutation();
   const { data: managers = [] } = useManagersQuery();
@@ -50,7 +52,7 @@ export const AddPropertyPage = () => {
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

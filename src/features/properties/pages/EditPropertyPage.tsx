@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { useManagersQuery } from "@/features/managers/hooks/queries";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useDeletePropertyMutation, useEditPropertyMutation, usePropertiesQuery } from "../hooks/queries";
 import { editPropertyRoute } from "@/routes/router";
  
@@ -30,6 +31,7 @@ export const EditPropertyPage = () => {
 
   
     const navigate = useNavigate();
+    const dismissDialog = useDismissDialog();
     const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
     const { propertyId } = editPropertyRoute.useParams();
     const { data: properties = [] } = usePropertiesQuery();
@@ -72,7 +74,7 @@ export const EditPropertyPage = () => {
 
   return (
     <>
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

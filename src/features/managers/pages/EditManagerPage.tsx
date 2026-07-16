@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { GenericAlertDialog } from "@/components/layout/GenericAlertDialog";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { editManagerRoute } from "@/routes/router";
 import {
   useDeleteManagerMutation,
@@ -24,6 +25,7 @@ export const EditManagerPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog();
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const { managerId } = editManagerRoute.useParams();
   const { data: managers = [] } = useManagersQuery();
@@ -54,7 +56,7 @@ export const EditManagerPage = () => {
 
   return (
     <>
-      <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+      <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
         <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">

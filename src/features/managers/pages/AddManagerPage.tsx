@@ -11,10 +11,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useAddManagerMutation } from "../hooks/queries";
 
 export const AddManagerPage = () => {
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog();
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
   const addManager = useAddManagerMutation();
 
@@ -32,7 +34,7 @@ export const AddManagerPage = () => {
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && navigateToDashboard()}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

@@ -11,13 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { useDismissDialog } from "@/hooks/useDismissDialog";
 import { useSignUpMutation } from "../hooks/mutations";
-import { getAuthStatus } from "../store/authStore";
 
 export function SignUpPage() {
   const navigate = useNavigate();
+  const dismissDialog = useDismissDialog("/");
   const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true });
-  const navigateToLanding = () => navigate({ to: "/", replace: true });
   const signUp = useSignUpMutation();
 
   const form = useForm({
@@ -34,11 +34,7 @@ export function SignUpPage() {
   });
 
   return (
-    <Dialog open={true} onOpenChange={(open) => {if (!open && getAuthStatus() === "authenticated") {
-      navigateToDashboard();
-    } else {
-      navigateToLanding();
-    }}}>
+    <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
