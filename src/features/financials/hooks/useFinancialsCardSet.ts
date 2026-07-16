@@ -15,6 +15,8 @@ export const useFinancialsCardSet = () => {
     {
       title: "Net Income",
       value: `${financials?.net_profit ?? 0} €`,
+      format: "text-green-600"
+
     },
   ];
 

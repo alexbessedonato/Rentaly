@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useFinancialsCardSet } from "../hooks/useFinancialsCardSet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -16,7 +17,7 @@ export const FinancialsCardSet = () => {
             <CardTitle>{card.title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-blue-950">{card.value}</p>
+            <p className={cn("text-2xl font-semibold", card.format ? card.format : "text-blue-950")}>{card.value}</p>
           </CardContent>
         </Card>
       ))}
