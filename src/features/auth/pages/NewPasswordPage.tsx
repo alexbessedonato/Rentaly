@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,22 +11,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useDismissDialog } from "@/hooks/useDismissDialog";
-import { useLoginMutation } from "../hooks/mutations";
+import { usePasswordUpdateMutation } from "../hooks/mutations";
+import { useNavigate } from "@tanstack/react-router";
 
-export function LoginPage() {
-  const navigate = useNavigate();
+export function NewPasswordPage() {
   const dismissDialog = useDismissDialog("/");
-  const navigateToDashboard = () => navigate({ to: "/dashboard", replace: true});
-  const navigateToPasswordReset = () => navigate({ to: "/password-reset"});
-  const login = useLoginMutation();
+  const navigate = useNavigate();
+  const navigateToDashboard = () => navigate({ to: "/dashboard" });
+  const confirmNewPassword = usePasswordUpdateMutation()
 
   const form = useForm({
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
     onSubmit: async ({ value }) => {
-      await login.mutateAsync(value);
+      await confirmNewPassword.mutateAsync(value.password)
       navigateToDashboard();
     },
   });
@@ -36,9 +35,11 @@ export function LoginPage() {
     <Dialog open={true} onOpenChange={(open) => !open && dismissDialog()}>
       <DialogContent className="sm:max-w-sm backdrop-blur-md bg-white/90">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">Login</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center">
+            Nueva Contraseña
+          </DialogTitle>
           <DialogDescription className="text-center">
-            Introduce tus datos para entrar.
+            Introduce tu nueva contraseña.
           </DialogDescription>
         </DialogHeader>
 
@@ -51,20 +52,20 @@ export function LoginPage() {
           className="space-y-4 pt-4"
         >
           <form.Field
-            name="email"
+            name="password"
             validators={{
               onChange: ({ value }) =>
-                !value.includes("@") ? "Email inválido" : undefined,
+                value.length < 6 ? "Mínimo 6 caracteres" : undefined,
             }}
             children={(field) => (
               <Field>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                <FieldLabel htmlFor={field.name}>Nueva Contraseña</FieldLabel>
                 <Input
                   id={field.name}
+                  type="password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="ejemplo@correo.com"
                 />
                 {field.state.meta.errors.length > 0 && (
                   <FieldError>{field.state.meta.errors.join(", ")}</FieldError>
@@ -74,14 +75,18 @@ export function LoginPage() {
           />
 
           <form.Field
-            name="password"
+            name="confirmPassword"
             validators={{
-              onChange: ({ value }) =>
-                value.length < 6 ? "Mínimo 6 caracteres" : undefined,
+              onChange: ({ value, fieldApi }) => {
+                if (value !== fieldApi.form.getFieldValue("password")) {
+                  return "Las contraseñas no coinciden";
+                }
+                return undefined;
+              },
             }}
             children={(field) => (
               <Field>
-                <FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
+                <FieldLabel htmlFor={field.name}>Confirmar Contraseña</FieldLabel>
                 <Input
                   id={field.name}
                   type="password"
@@ -100,23 +105,12 @@ export function LoginPage() {
             <Button
               type="submit"
               className="w-full"
-              disabled={form.state.isSubmitting || login.isPending}
+              disabled={form.state.isSubmitting}
             >
-              {form.state.isSubmitting || login.isPending
-                ? "Entrando..."
-                : "Iniciar Sesión"}
+              {form.state.isSubmitting ? "Guardando..." : "Guardar contraseña"}
             </Button>
           </DialogFooter>
         </form>
-        
-        <Button
-              variant="link"
-              className="w-full"
-              onClick={navigateToPasswordReset}
-              
-            >
-              Forgot Password?
-            </Button>
       </DialogContent>
     </Dialog>
   );
