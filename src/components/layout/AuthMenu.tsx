@@ -8,7 +8,6 @@ import { NavAvatar } from "./NavAvatar"
 
 export const AuthMenu = () => {
     const auth = useStore($auth)
-
     return (
         <div>
             {auth.status === 'loading' && <span>Loading...</span>}

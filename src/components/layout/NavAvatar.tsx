@@ -1,17 +1,17 @@
 import {
     Avatar,
     AvatarFallback,
-    AvatarImage,
 } from "@/components/ui/avatar"
+import { $auth } from "@/features/auth/store/authStore"
+import { getUserInitials } from "@/utils/getUserInitials"
+import { useStore } from "@nanostores/react"
 
 export function NavAvatar() {
+    const auth = useStore($auth)
+    const initials = getUserInitials(auth)
     return (
         <Avatar>
-            <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="@shadcn"
-            />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
     )
 }
