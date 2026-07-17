@@ -1,8 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { loginWithEmail, logout, signUpWithEmail } from "../api/auth";
-import type { LoginFormValues, SignUpFormValues } from "../types";
+import { loginWithEmail, logout, resetPassword, signUpWithEmail, updatePassword } from "../api/auth";
+import type {
+  LoginFormValues,
+  PasswordResetFormValues,
+  SignUpFormValues,
+} from "../types";
 
 export const useLoginMutation = () => {
   return useMutation({
@@ -47,3 +51,31 @@ export const useLogoutMutation = () => {
     },
   });
 };
+
+export const usePasswordResetMutation = () => {
+  return useMutation({
+    mutationFn: (values: PasswordResetFormValues) => resetPassword(values),
+    onSuccess: () => {
+      toast.success("Password reset email sent, check your inbox")
+    },
+    onError: (error: unknown) => {
+      toast.error("Error al resetear contraseña", {
+        description: getErrorMessage(error)
+      })
+    }
+  })
+}
+
+export const usePasswordUpdateMutation = () => {
+  return useMutation({
+    mutationFn: (values: string) => updatePassword(values),
+    onSuccess: () => {
+      toast.success("contraseña actualizada con exito")
+    },
+    onError: (error: unknown)=> {
+      toast.error("Error al resetear contraseña", {
+        description: getErrorMessage(error)
+      })
+    }
+  })
+}

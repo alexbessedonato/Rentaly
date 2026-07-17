@@ -17,3 +17,11 @@ export interface SignUpFormValues extends LoginFormValues {
   confirmPassword: string;
 }
 
+export interface PasswordResetFormValues {
+  email: string;
+}
+
+export interface NewPasswordFormValues {
+  password: string
+}
+
